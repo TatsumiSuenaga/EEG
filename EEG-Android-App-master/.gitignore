@@ -1,0 +1,8 @@
+.gradle
+.idea
+Bluetooth_Elicited_Brain_Stimulation/local.properties
+/.idea/workspace.xml
+/.idea/libraries
+.DS_Store
+/build
+/captures

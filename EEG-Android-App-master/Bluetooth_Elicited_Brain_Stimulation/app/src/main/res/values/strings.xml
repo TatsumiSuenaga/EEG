@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Bluetooth_Elicited_Brain_Stimulation</string>
+    <string name="Recievers">Receivers:</string>
+    <string name="Reciever">Receiver:</string>
+    <string name="Transmitters">Transmitters:</string>
+    <string name="title_activity_bluetooth_scan">BluetoothScan</string>
+    <string name="title_activity_device_communication">DeviceCommunication</string>
+    <string name="no_ble">No BLE Devices Found</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="profile_button">Profile</string>
+    <string name="records_button">Records</string>
+    <string name="new_recording_button">New Recording</string>
+</resources>
