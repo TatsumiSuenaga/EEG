@@ -1,4 +1,4 @@
-# EMG-Android-App
-EMG Application
+# EEG-Android-App
+EEG Application
 
-EMG Application programmed on Android for Dr. Page
+EEG Application programmed on Android for Dr. Page
