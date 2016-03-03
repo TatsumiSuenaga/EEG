@@ -11,6 +11,7 @@ public class Reading {
     private Graph mGraph;
     private File mFile;
     private String mMuscle; // this might become a different type of object!
+    //Wow
 
     public Reading(File file) {
         mFile = file;
@@ -39,5 +40,9 @@ public class Reading {
 
     public void setMuscle(String muscle) {
         mMuscle = muscle;
+    }
+
+    public void nothing(){
+
     }
 }
