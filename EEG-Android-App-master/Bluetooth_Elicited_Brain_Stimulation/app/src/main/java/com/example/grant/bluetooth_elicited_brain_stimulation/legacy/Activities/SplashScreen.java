@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 
+import com.example.grant.bluetooth_elicited_brain_stimulation.MainActivity;
 import com.example.grant.bluetooth_elicited_brain_stimulation.R;
 
 public class SplashScreen extends AppCompatActivity {
@@ -27,7 +28,7 @@ public class SplashScreen extends AppCompatActivity {
                 public void run() {
                     // This method will be executed once the timer is over
                     // Start your app main activity
-                    Intent i = new Intent(SplashScreen.this, Profiles.class);
+                    Intent i = new Intent(SplashScreen.this, MainActivity.class);
                     startActivity(i);
                     // close this activity
                     finish();
