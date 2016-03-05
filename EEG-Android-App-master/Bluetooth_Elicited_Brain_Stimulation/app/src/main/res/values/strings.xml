@@ -10,4 +10,6 @@
     <string name="profile_button">Profile</string>
     <string name="records_button">Records</string>
     <string name="new_recording_button">New Recording</string>
+    <string name="title_activity_records">Records</string>
+    <string name="title_activity_record_reading">RecordReading</string>
 </resources>

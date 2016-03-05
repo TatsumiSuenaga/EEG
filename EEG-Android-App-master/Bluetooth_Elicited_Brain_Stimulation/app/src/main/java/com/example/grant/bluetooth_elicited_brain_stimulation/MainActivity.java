@@ -37,7 +37,9 @@ public class MainActivity extends AppCompatActivity {
                 // if your activity is called "RecordsActivity", use the following line
 //                Intent i = new Intent(this, ProfileActivity.class);
 //                startActivity(i);
-                Toast.makeText(MainActivity.this, "You clicked the records button!", Toast.LENGTH_SHORT).show();
+                Intent i = new Intent(MainActivity.this, RecordsActivity.class);
+                startActivity(i);
+                //Toast.makeText(MainActivity.this, "You clicked the records button!", Toast.LENGTH_SHORT).show();
             }
         });
 
