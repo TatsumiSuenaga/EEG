@@ -2,50 +2,56 @@ package com.example.grant.bluetooth_elicited_brain_stimulation;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import java.util.Date;
-
 import java.util.ArrayList;
 
 public class RecordsActivity extends AppCompatActivity {
 
-    private ArrayList<Reading> readingsList;
+    private ArrayList<Recording> recordingsList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_records);
 
-        final Reading reading1 = new Reading();
-        reading1.setDate(new Date(System.currentTimeMillis()));
-        Reading reading2 = new Reading();
-        reading2.setDate(new Date(System.currentTimeMillis()+1000000));
+        ListView recordingsLV = (ListView)findViewById(R.id.listViewRecords);
 
-        ListView recordsList = (ListView)findViewById(R.id.listViewRecords);
+        //Test with 1 patient, 2 records
+        PatientDAO patientDAO = new PatientDAO(this);
+        RecordingDAO recordingDAO = new RecordingDAO(this);
 
-        readingsList = new ArrayList<Reading>();
-        readingsList.add(reading1);
-        readingsList.add(reading2);
+        Patient patient = new Patient("David", "Kerns");
+        patientDAO.createPatient(patient);
 
-        final ArrayAdapter<Reading> readingAdapter = new ArrayAdapter<Reading>(RecordsActivity.this,android.R.layout.simple_list_item_1, readingsList);
-        recordsList.setAdapter(readingAdapter);
+        Patient test = patientDAO.getPatient(1);
+        final Recording recording = new Recording(System.currentTimeMillis(),"Funny bone",test);
+        recording.setID(1234334);
+        final Recording recording2 = new Recording(System.currentTimeMillis()+1500000,"Not so funny bone",test);
 
-        recordsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        recordingDAO.createRecording(recording);
+        recordingDAO.createRecording(recording2);
+
+        recordingsList = recordingDAO.getRecordings();
+
+        ArrayAdapter<Recording> recordingAdapter = new ArrayAdapter<Recording>(RecordsActivity.this,android.R.layout.simple_list_item_1, recordingsList);
+        recordingsLV.setAdapter(recordingAdapter);
+
+        recordingsLV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> arg0, View v, int position, long arg3) {
-                Intent i = RecordReadingActivity.newIntent(RecordsActivity.this, reading1);
+                Recording r = recordingsList.get(position);
+                Intent i = RecordReadingActivity.newIntent(RecordsActivity.this, r);
                 startActivity(i);
 
             }
         });
+
+        patientDAO.close();
 
     }
 

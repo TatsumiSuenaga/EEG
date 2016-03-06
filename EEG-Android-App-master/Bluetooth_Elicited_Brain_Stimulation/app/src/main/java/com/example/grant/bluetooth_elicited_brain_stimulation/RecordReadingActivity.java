@@ -9,16 +9,21 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
+
+/**
+ * Created by Tatsumi on 3/5/16
+ */
 
 public class RecordReadingActivity extends AppCompatActivity {
 
-    private EditText mIdText;
+    private TextView mIdText;
 
 
     private static final String EXTRA_RECORD_READING =
             "com.example.grant.bluetooth_elicited_brain_stimulation.record_reading";
 
-    public static Intent newIntent (Context packageContext, Reading r){
+    public static Intent newIntent (Context packageContext, Recording r){
         Intent i = new Intent(packageContext, RecordReadingActivity.class);
         i.putExtra(EXTRA_RECORD_READING, r);
         return i;
@@ -32,9 +37,10 @@ public class RecordReadingActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         Intent i = getIntent();
-        Reading r = (Reading) i.getParcelableExtra(EXTRA_RECORD_READING);
-        mIdText = (EditText) findViewById(R.id.idTitle);
-        mIdText.setText("Patient: " + r.getID());
+        Recording r = i.getParcelableExtra(EXTRA_RECORD_READING);
+        mIdText = (TextView) findViewById(R.id.idTitle);
+        mIdText.setText("Patient Name: " + r.getPatient() + "\nPatient ID: " + r.getID() + "\nRecording Date: " + r.getDate()
+                + "\nMuscle: " + r.getMuscle());
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {

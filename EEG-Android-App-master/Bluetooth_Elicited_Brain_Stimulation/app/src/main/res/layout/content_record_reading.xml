@@ -13,7 +13,7 @@
     tools:showIn="@layout/activity_record_reading"
     tools:context="com.example.grant.bluetooth_elicited_brain_stimulation.RecordReadingActivity">
 
-    <EditText
+    <TextView
         android:id="@+id/idTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
