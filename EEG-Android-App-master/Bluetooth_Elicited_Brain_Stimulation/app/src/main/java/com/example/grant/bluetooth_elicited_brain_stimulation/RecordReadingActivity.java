@@ -136,10 +136,12 @@ public class RecordReadingActivity extends AppCompatActivity {
                 data.addDataSet(set);
             }
             data.addXValue("");
+            //data.addEntry(
+            //        new Entry((float) (Math.random() * 75) + 20f, set
+            //                .getEntryCount()), 0);
             data.addEntry(
-                    new Entry((float)(Math.random()*75)+20f,set
-                    .getEntryCount()), 0);
-
+                    new Entry((float)0f,set
+                            .getEntryCount()), 0);
             //notify chart data have changed
             mChart.notifyDataSetChanged();
             //limit number of visible entries
@@ -178,7 +180,7 @@ public class RecordReadingActivity extends AppCompatActivity {
     }
     //method for making dataset
     private LineDataSet createSet() {
-        LineDataSet set = new LineDataSet(null, "Tatsumi Likes Balls");
+        LineDataSet set = new LineDataSet(null, "amount of pizza parties given to EEG group");
         set.setDrawCubic(true);
         set.setCubicIntensity(0.2f);
         set.setAxisDependency(YAxis.AxisDependency.LEFT);
