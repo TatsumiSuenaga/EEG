@@ -139,7 +139,7 @@ public class RecordReadingActivity extends AppCompatActivity {
             //limit number of visible entries
             mChart.setVisibleXRange(10,10);
             //scroll to last entry
-            mChart.moveViewToX(data.getXValCount()-7);
+           // mChart.moveViewToX(data.getXValCount()-7);
         }
     }
 
@@ -152,19 +152,13 @@ public class RecordReadingActivity extends AppCompatActivity {
             @Override
             public void run() {
                 //add 100 test entries
-                for(int i = 0; i<120; i++) {
+                for(int i = 0; i<14; i++) {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             addEntry(); //chart is notified of update via addEntry method
                         }
                     });
-                    //pause between adds
-                    try {
-                        Thread.sleep(300);
-                    } catch (InterruptedException e) {
-                        //not sure what to do with errors
-                    }
                 }
             }
         }).start();
