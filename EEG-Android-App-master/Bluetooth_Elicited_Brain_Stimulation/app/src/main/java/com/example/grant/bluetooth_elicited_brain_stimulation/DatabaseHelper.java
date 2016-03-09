@@ -19,6 +19,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_PATIENT_ID = "id";
     public static final String COLUMN_PATIENT_FIRSTNAME = "first_name";
     public static final String COLUMN_PATIENT_LASTNAME = "last_name";
+    public static final String COLUMN_PATIENT_ADDRESS = "address";
+    public static final String COLUMN_PATIENT_EMAIL = "email";
 
     // Recordings Table column names
     public static final String COLUMN_RECORDING_ID = COLUMN_PATIENT_ID;
@@ -29,7 +31,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String CREATE_TABLE_PATIENTS = "CREATE TABLE " + TABLE_PATIENTS
             + "(" + COLUMN_PATIENT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
             + COLUMN_PATIENT_FIRSTNAME + " TEXT NOT NULL,"
-            + COLUMN_PATIENT_LASTNAME + " TEXT NOT NULL" + ")";
+            + COLUMN_PATIENT_LASTNAME + " TEXT NOT NULL,"
+            + COLUMN_PATIENT_ADDRESS + " TEXT NOT NULL,"
+            + COLUMN_PATIENT_EMAIL + " TEXT NOT NULL" + ")";
 
     public static final String CREATE_TABLE_RECORDINGS = "CREATE TABLE " + TABLE_RECORDINGS
             + "(" + COLUMN_RECORDING_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"

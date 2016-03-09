@@ -1,5 +1,6 @@
 package com.example.grant.bluetooth_elicited_brain_stimulation;
 
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -22,6 +23,8 @@ public class PatientDAO extends RecordingDBDAO {
         ContentValues values = new ContentValues();
         values.put(DatabaseHelper.COLUMN_PATIENT_FIRSTNAME, patient.getFirstName());
         values.put(DatabaseHelper.COLUMN_PATIENT_LASTNAME, patient.getLastName());
+        values.put(DatabaseHelper.COLUMN_PATIENT_ADDRESS, patient.getAddress());
+        values.put(DatabaseHelper.COLUMN_PATIENT_EMAIL, patient.getEmail());
 
         return database.insert(DatabaseHelper.TABLE_PATIENTS, null, values);
     }
@@ -30,6 +33,8 @@ public class PatientDAO extends RecordingDBDAO {
         ContentValues values = new ContentValues();
         values.put(DatabaseHelper.COLUMN_PATIENT_FIRSTNAME, patient.getFirstName());
         values.put(DatabaseHelper.COLUMN_PATIENT_LASTNAME, patient.getLastName());
+        values.put(DatabaseHelper.COLUMN_PATIENT_ADDRESS, patient.getAddress());
+        values.put(DatabaseHelper.COLUMN_PATIENT_EMAIL, patient.getEmail());
 
         long result = database.update(DatabaseHelper.TABLE_PATIENTS, values,
                 WHERE_ID_EQUALS,
@@ -54,6 +59,8 @@ public class PatientDAO extends RecordingDBDAO {
         patient.setID(c.getInt(c.getColumnIndex(DatabaseHelper.COLUMN_PATIENT_ID)));
         patient.setFirstName(c.getString(c.getColumnIndex(DatabaseHelper.COLUMN_PATIENT_FIRSTNAME)));
         patient.setLastName(c.getString(c.getColumnIndex(DatabaseHelper.COLUMN_PATIENT_LASTNAME)));
+        patient.setAddress(c.getString(c.getColumnIndex(DatabaseHelper.COLUMN_PATIENT_ADDRESS)));
+        patient.setEmail(c.getString(c.getColumnIndex(DatabaseHelper.COLUMN_PATIENT_EMAIL)));
 
         return patient;
     }
@@ -63,13 +70,17 @@ public class PatientDAO extends RecordingDBDAO {
         Cursor cursor = database.query(DatabaseHelper.TABLE_PATIENTS,
                 new String[] { DatabaseHelper.COLUMN_PATIENT_ID,
                         DatabaseHelper.COLUMN_PATIENT_FIRSTNAME,
-                        DatabaseHelper.COLUMN_PATIENT_LASTNAME }, null, null, null, null, null);
+                        DatabaseHelper.COLUMN_PATIENT_LASTNAME,
+                        DatabaseHelper.COLUMN_PATIENT_ADDRESS,
+                        DatabaseHelper.COLUMN_PATIENT_EMAIL}, null, null, null, null, null);
 
         while (cursor.moveToNext()) {
             Patient patient = new Patient();
             patient.setID(cursor.getInt(0));
             patient.setFirstName(cursor.getString(1));
             patient.setLastName(cursor.getString(2));
+            patient.setAddress(cursor.getString(3));
+            patient.setEmail(cursor.getString(4));
             patients.add(patient);
         }
         return patients;

@@ -1,0 +1,54 @@
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:layout_margin="10dp"
+             android:orientation="vertical"
+    >
+    <TableRow>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="-50dp"
+            android:src="@drawable/profileface"
+            />
+    </TableRow>
+    <TableRow>
+        <EditText android:id="@+id/patient_fName"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+            />
+    </TableRow>
+    <TableRow>
+        <EditText android:id="@+id/patient_lName"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+            />
+    </TableRow>
+
+    <TableRow>
+
+
+        <EditText android:id="@+id/location"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+            />
+
+    </TableRow>
+    <TableRow>
+        <EditText android:id="@+id/email"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+            />
+    </TableRow>
+    <TableRow>
+
+        <Button
+            android:id="@+id/save_patient_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/save_patient_button"
+            />
+
+    </TableRow>
+</TableLayout>
