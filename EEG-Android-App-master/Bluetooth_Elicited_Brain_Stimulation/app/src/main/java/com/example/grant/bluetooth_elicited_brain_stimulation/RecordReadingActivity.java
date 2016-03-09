@@ -127,12 +127,10 @@ public class RecordReadingActivity extends AppCompatActivity {
                 data.addDataSet(set);
             }
             data.addXValue("");
-            //data.addEntry(
-            //        new Entry((float) (Math.random() * 75) + 20f, set
-            //                .getEntryCount()), 0);
             data.addEntry(
-                    new Entry((float)0f,set
+                    new Entry((float) (Math.random() * 75) + 20f, set
                             .getEntryCount()), 0);
+
             //notify chart data have changed
             mChart.notifyDataSetChanged();
             //limit number of visible entries
@@ -151,7 +149,7 @@ public class RecordReadingActivity extends AppCompatActivity {
             @Override
             public void run() {
                 //add 100 test entries
-                for(int i = 0; i<100; i++) {
+                for(int i = 0; i<120; i++) {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -160,7 +158,7 @@ public class RecordReadingActivity extends AppCompatActivity {
                     });
                     //pause between adds
                     try {
-                        Thread.sleep(600);
+                        Thread.sleep(300);
                     } catch (InterruptedException e) {
                         //not sure what to do with errors
                     }
@@ -171,7 +169,7 @@ public class RecordReadingActivity extends AppCompatActivity {
     }
     //method for making dataset
     private LineDataSet createSet() {
-        LineDataSet set = new LineDataSet(null, "amount of pizza parties given to EEG group");
+        LineDataSet set = new LineDataSet(null, "Beta Waves");
         set.setDrawCubic(true);
         set.setCubicIntensity(0.2f);
         set.setAxisDependency(YAxis.AxisDependency.LEFT);
