@@ -64,6 +64,11 @@
             android:label="@string/title_activity_new_recording"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
+        <activity
+            android:name=".GraphActivity"
+            android:label="GraphActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
     </application>
 
 </manifest>

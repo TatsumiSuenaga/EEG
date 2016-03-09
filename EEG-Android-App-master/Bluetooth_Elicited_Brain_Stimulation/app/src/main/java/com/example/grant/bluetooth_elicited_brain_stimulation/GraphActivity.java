@@ -1,14 +1,14 @@
 package com.example.grant.bluetooth_elicited_brain_stimulation;
 
-import android.content.Context;
-import android.content.Intent;
+
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+
 import android.support.v7.widget.Toolbar;
 import android.widget.AbsListView;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
+
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Legend;
@@ -21,35 +21,34 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 
 /**
  * Created by alex m on 3/9/16
+ *
+ * Views: content_graph.xml and activity_graph.xml
  */
 public class GraphActivity extends AppCompatActivity {
 
     private RelativeLayout mainLayout;
 
-    private TextView mIdText;
-
     private LineChart mChart;
 
 
-    private static final String EXTRA_RECORD_READING =
-            "com.example.grant.bluetooth_elicited_brain_stimulation.record_reading";
+    /**private static final String EXTRA_RECORD_READING =
+            "com.example.grant.bluetooth_elicited_brain_stimulation.record_reading";**/
 
+    /** Not sure if doing puttingExtra with this activity
     public static Intent newIntent (Context packageContext, Recording r){
         Intent i = new Intent(packageContext, GraphActivity.class);
         i.putExtra(EXTRA_RECORD_READING, r);
         return i;
-    }
+    }**/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //layout.GraphActivity?
-        //setContentView(R.layout.activity_record_reading);
-        //whats toolbar for?
-        //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        //setSupportActionBar(toolbar);
+        setContentView(R.layout.activity_graph);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
-        mainLayout = (RelativeLayout)findViewById(R.id.recordReadingLayout);
+        mainLayout = (RelativeLayout)findViewById(R.id.graphLayout);
 
         //create line chart
         mChart = new LineChart(this);
