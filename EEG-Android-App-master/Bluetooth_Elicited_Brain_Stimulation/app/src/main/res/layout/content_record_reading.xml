@@ -14,9 +14,42 @@
     tools:showIn="@layout/activity_record_reading"
     tools:context="com.example.grant.bluetooth_elicited_brain_stimulation.RecordReadingActivity">
 
-    <TextView
-        android:id="@+id/idTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+
+    <TableRow
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        >
+        <TextView
+            android:id="@+id/patientInfo"
+            android:width="1000dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="15sp"
+            android:padding="10dp"
+            android:background="@color/white"
+            android:textColor="@color/colorDarkGray"
+            android:layout_column="1"
+
+            />
+
+    </TableRow>
+
+    <TableRow
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp">
+        <TextView
+            android:id="@+id/graphInfo"
+            android:width="1000dp"
+            android:textSize="15sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:background="@color/white"
+            android:textColor="@color/colorDarkGray"
+            android:layout_column="1"
+            />
+    </TableRow>
 
 </TableLayout>

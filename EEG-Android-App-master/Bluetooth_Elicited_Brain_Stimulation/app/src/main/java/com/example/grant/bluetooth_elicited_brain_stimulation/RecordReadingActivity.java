@@ -24,6 +24,8 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
+import java.text.DateFormat;
+
 /**
  * Created by Tatsumi on 3/5/16
  */
@@ -31,9 +33,8 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 public class RecordReadingActivity extends AppCompatActivity {
 
     private TableLayout mainLayout;
-
-    private TextView mIdText;
-
+    private TextView mPatientText;
+    private TextView mGraphText;
     private LineChart mChart;
 
 
@@ -111,11 +112,19 @@ public class RecordReadingActivity extends AppCompatActivity {
         YAxis yAxis2 = mChart.getAxisRight();
         yAxis2.setEnabled(false);
 
+        //TextView for Patient/Recording information
         Intent i = getIntent();
         Recording r = i.getParcelableExtra(EXTRA_RECORD_READING);
-        mIdText = (TextView) findViewById(R.id.idTitle);
-        mIdText.setText("Patient Name: " + r.getPatient() + "\nPatient ID: " + r.getID() + "\nRecording Date: " + r.getDate()
-                + "\nMuscle: " + r.getMuscle());
+        mPatientText = (TextView) findViewById(R.id.patientInfo);
+        String pText = "Patient Name: " + r.getPatient() + "\nPatient ID: " + r.getID() + "\nRecording Date: "
+                + DateFormat.getDateInstance(DateFormat.LONG).format(r.getDate())
+                + "\nMuscle: " + r.getMuscle(); //apparently android yells at you if you concatenate in setText...
+        mPatientText.setText(pText);
+
+        //TextView for Statistics of the Graph, not sure if we will keep this
+        mGraphText = (TextView) findViewById(R.id.graphInfo);
+        String gText = "Statistics: N/A" + "\nAmplitude: N/A" + "\nFrequency: N/A";
+        mGraphText.setText(gText);
 
     }
     private void addEntry() {
