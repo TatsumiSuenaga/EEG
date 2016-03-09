@@ -3,6 +3,7 @@ package com.example.grant.bluetooth_elicited_brain_stimulation;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -13,11 +14,18 @@ import java.util.ArrayList;
 public class RecordsActivity extends AppCompatActivity {
 
     private ArrayList<Recording> recordingsList;
+    private Toolbar mToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_records);
+
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        if (mToolbar != null) {
+            mToolbar.setTitle("Recording");
+            setSupportActionBar(mToolbar);
+        }
 
         ListView recordingsLV = (ListView)findViewById(R.id.listViewRecords);
 
@@ -30,7 +38,6 @@ public class RecordsActivity extends AppCompatActivity {
 
         Patient test = patientDAO.getPatient(1);
         final Recording recording = new Recording(System.currentTimeMillis(),"Funny bone",test);
-        recording.setID(1234334);
         final Recording recording2 = new Recording(System.currentTimeMillis()+1500000,"Not so funny bone",test);
 
         recordingDAO.createRecording(recording);

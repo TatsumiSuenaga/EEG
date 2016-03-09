@@ -114,15 +114,6 @@ public class RecordReadingActivity extends AppCompatActivity {
         mIdText.setText("Patient Name: " + r.getPatient() + "\nPatient ID: " + r.getID() + "\nRecording Date: " + r.getDate()
                 + "\nMuscle: " + r.getMuscle());
 
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
     }
     private void addEntry() {
         LineData data = mChart.getData();

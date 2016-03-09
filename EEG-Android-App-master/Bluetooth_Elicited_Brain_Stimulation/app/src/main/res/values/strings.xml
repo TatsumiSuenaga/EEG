@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Bluetooth_Elicited_Brain_Stimulation</string>
+    <string name="app_name">Neuroaspire EEG</string>
     <string name="Recievers">Receivers:</string>
     <string name="Reciever">Receiver:</string>
     <string name="Transmitters">Transmitters:</string>
@@ -12,4 +12,5 @@
     <string name="new_recording_button">New Recording</string>
     <string name="title_activity_records">Records</string>
     <string name="title_activity_record_reading">RecordReading</string>
+    <string name="title_activity_new_recording">NewRecording</string>
 </resources>

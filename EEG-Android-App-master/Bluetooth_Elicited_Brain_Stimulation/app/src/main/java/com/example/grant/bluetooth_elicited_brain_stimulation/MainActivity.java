@@ -17,6 +17,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //Change these to listview
         Button profileButton = (Button) findViewById(R.id.profile_button);
         Button recordsButton = (Button) findViewById(R.id.records_button);
         Button newRecordingButton = (Button) findViewById(R.id.new_recording_button);
@@ -49,7 +50,9 @@ public class MainActivity extends AppCompatActivity {
                 // if your activity is called "NewRecordingActivity", use the following line
 //                Intent i = new Intent(this, ProfileActivity.class);
 //                startActivity(i);
-                Toast.makeText(MainActivity.this, "You clicked the new recording button!", Toast.LENGTH_SHORT).show();
+                Intent i = new Intent(MainActivity.this, NewRecordingActivity.class);
+                startActivity(i);
+                //Toast.makeText(MainActivity.this, "You clicked the new recording button!", Toast.LENGTH_SHORT).show();
             }
         });
     }
