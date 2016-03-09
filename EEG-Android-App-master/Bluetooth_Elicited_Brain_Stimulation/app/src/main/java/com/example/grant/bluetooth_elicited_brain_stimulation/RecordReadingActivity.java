@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.AbsListView;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
+import android.widget.TableLayout;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.LineChart;
@@ -29,7 +30,7 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 
 public class RecordReadingActivity extends AppCompatActivity {
 
-    private RelativeLayout mainLayout;
+    private TableLayout mainLayout;
 
     private TextView mIdText;
 
@@ -54,7 +55,7 @@ public class RecordReadingActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        mainLayout = (RelativeLayout)findViewById(R.id.recordReadingLayout);
+        mainLayout = (TableLayout)findViewById(R.id.recordReadingLayout);
 
         //create line chart
         mChart = new LineChart(this);
