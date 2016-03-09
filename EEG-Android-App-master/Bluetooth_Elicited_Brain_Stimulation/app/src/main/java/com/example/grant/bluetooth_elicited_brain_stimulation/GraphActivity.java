@@ -149,7 +149,7 @@ public class GraphActivity extends AppCompatActivity {
                     });
                     //pause between adds
                     try {
-                        Thread.sleep(300);
+                        Thread.sleep(500);
                     } catch (InterruptedException e) {
                         //not sure what to do with errors
                     }
