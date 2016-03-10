@@ -86,6 +86,7 @@ public class ProfileListActivityFragment extends Fragment {
 
         private List<Patient> mPatients;
 
+        //This crimes stuff is from BigNerdRanch, prob change it to something appropriate
         public ProfileAdapter(List<Patient> crimes) {
             mPatients = crimes;
         }

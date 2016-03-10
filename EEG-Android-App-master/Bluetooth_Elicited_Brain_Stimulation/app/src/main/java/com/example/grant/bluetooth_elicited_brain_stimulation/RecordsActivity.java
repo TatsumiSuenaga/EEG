@@ -33,7 +33,7 @@ public class RecordsActivity extends AppCompatActivity {
         PatientDAO patientDAO = new PatientDAO(this);
         RecordingDAO recordingDAO = new RecordingDAO(this);
 
-        Patient patient = new Patient("David", "Kerns","osu.edu", "12223");
+        Patient patient = new Patient("David", "Kerns","12223", "osu.edu");
         patientDAO.createPatient(patient);
 
         Patient test = patientDAO.getPatient(1);

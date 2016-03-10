@@ -25,7 +25,7 @@ public class NewRecordingActivity extends AppCompatActivity {
         mButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                Log.d(TAG, "Broken");
+                Log.d(TAG, "Confirm button OnClickListener");
                 Intent i = new Intent(NewRecordingActivity.this, GraphActivity.class);
                 startActivity(i);
             }
