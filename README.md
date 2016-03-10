@@ -8,6 +8,6 @@ Using the Emotiv Epoc+ headset (https://emotiv.com/)
 Team Members:
 -------------
 
-***Tatsumi Suenaga, Chris Radebaugh, Alex Mowen, Alex Neal, Jimmy Kang***
+***Tatsumi Suenaga, Andy Kim, Chris Radebaugh, Alex Moen, Alex Neal, Jimmy Kang***
 
 
