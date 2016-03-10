@@ -118,7 +118,7 @@ public class RecordReadingActivity extends AppCompatActivity {
         mPatientText = (TextView) findViewById(R.id.patientInfo);
         String pText = "Patient Name: " + r.getPatient() + "\nPatient ID: " + r.getID() + "\nRecording Date: "
                 + DateFormat.getDateInstance(DateFormat.LONG).format(r.getDate())
-                + "\nMuscle: " + r.getMuscle(); //apparently android yells at you if you concatenate in setText...
+                + "\nChannels: 1, 2, 14" ; //apparently android yells at you if you concatenate in setText...
         mPatientText.setText(pText);
 
         //TextView for Statistics of the Graph, not sure if we will keep this

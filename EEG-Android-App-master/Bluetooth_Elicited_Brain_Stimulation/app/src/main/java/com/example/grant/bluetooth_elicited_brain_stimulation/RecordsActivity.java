@@ -23,7 +23,7 @@ public class RecordsActivity extends AppCompatActivity {
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         if (mToolbar != null) {
-            mToolbar.setTitle("Recording");
+            mToolbar.setTitle("Records");
             setSupportActionBar(mToolbar);
         }
 

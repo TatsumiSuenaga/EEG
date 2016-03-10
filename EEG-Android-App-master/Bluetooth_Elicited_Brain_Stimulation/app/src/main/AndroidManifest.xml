@@ -66,7 +66,7 @@
         </activity>
         <activity
             android:name=".GraphActivity"
-            android:label="GraphActivity"
+            android:label="Realtime EEG Graph"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
 
