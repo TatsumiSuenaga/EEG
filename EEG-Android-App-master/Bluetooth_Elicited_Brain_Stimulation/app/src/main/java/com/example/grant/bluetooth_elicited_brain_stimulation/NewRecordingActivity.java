@@ -65,6 +65,9 @@ public class NewRecordingActivity extends AppCompatActivity {
                 Log.d(TAG, "Confirm button OnClickListener");
                 Intent i = new Intent(NewRecordingActivity.this, GraphActivity.class);
                 startActivity(i);
+                Log.e("FFTSample","Start Write File");
+                setDataFile();
+                isEnableWriteFile = true;
 
             }
         });
