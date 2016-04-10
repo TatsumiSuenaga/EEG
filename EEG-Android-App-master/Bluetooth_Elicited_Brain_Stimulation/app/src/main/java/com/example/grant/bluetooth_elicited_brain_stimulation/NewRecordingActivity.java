@@ -25,9 +25,11 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 
 public class NewRecordingActivity extends AppCompatActivity {
 
+    private final MyHandler handler = new MyHandler(this);
     private static final String TAG = NewRecordingActivity.class.getSimpleName();
     private Button mButton;
     private ListView mChannelList;private static final int REQUEST_ENABLE_BT = 1;
@@ -37,9 +39,75 @@ public class NewRecordingActivity extends AppCompatActivity {
     private boolean isEnableWriteFile = false;
     int userId;
     private BufferedWriter motion_writer;
-    IEdk.IEE_DataChannel_t[] Channel_list = {IEdk.IEE_DataChannel_t.IED_AF3, IEdk.IEE_DataChannel_t.IED_T7, IEdk.IEE_DataChannel_t.IED_Pz,
-            IEdk.IEE_DataChannel_t.IED_T8, IEdk.IEE_DataChannel_t.IED_AF4};
-    String[] Name_Channel = {"AF3","T7","Pz","T8","AF4"};
+    IEdk.IEE_DataChannel_t[] Channel_list = {
+            IEdk.IEE_DataChannel_t.IED_AF3, IEdk.IEE_DataChannel_t.IED_T7, IEdk.IEE_DataChannel_t.IED_T8,
+            IEdk.IEE_DataChannel_t.IED_AF4, IEdk.IEE_DataChannel_t.IED_F3, IEdk.IEE_DataChannel_t.IED_F4,
+            IEdk.IEE_DataChannel_t.IED_F7, IEdk.IEE_DataChannel_t.IED_F8, IEdk.IEE_DataChannel_t.IED_FC5,
+            IEdk.IEE_DataChannel_t.IED_FC6, IEdk.IEE_DataChannel_t.IED_P7, IEdk.IEE_DataChannel_t.IED_P8,
+            IEdk.IEE_DataChannel_t.IED_O1, IEdk.IEE_DataChannel_t.IED_O2};
+    String[] Name_Channel = {"AF3","T7","T8","AF4", "F3", "F4", "F7", "F8", "FC5", "FC6", "P7", "P8", "O1", "O2"};
+
+    private class MyHandler extends Handler {
+        private final WeakReference<NewRecordingActivity> mActivity;
+
+        public MyHandler(NewRecordingActivity activity) {
+            mActivity = new WeakReference<NewRecordingActivity>(activity);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+
+                case 0:
+                    int state = IEdk.IEE_EngineGetNextEvent();
+                    if (state == IEdkErrorCode.EDK_OK.ToInt()) {
+                        int eventType = IEdk.IEE_EmoEngineEventGetType();
+                        userId = IEdk.IEE_EmoEngineEventGetUserId();
+                        if(eventType == IEdk.IEE_Event_t.IEE_UserAdded.ToInt()){
+                            Log.e("SDK","User added");
+                            IEdk.IEE_FFTSetWindowingType(userId, IEdk.IEE_WindowsType_t.IEE_BLACKMAN);
+                            isEnablGetData = true;
+                        }
+                        if(eventType == IEdk.IEE_Event_t.IEE_UserRemoved.ToInt()){
+                            Log.e("SDK","User removed");
+                            isEnablGetData = false;
+                        }
+                    }
+
+                    break;
+                case 1:
+				/*Connect device with Epoc Plus headset*/
+                    int number = IEdk.IEE_GetEpocPlusDeviceCount();
+                    if(number != 0) {
+                        if(!lock){
+                            lock = true;
+                            IEdk.IEE_ConnectEpocPlusDevice(0,false);
+                        }
+                    }
+                    /**************************************/
+                    else lock = false;
+                    break;
+                case 2:
+                    for(int i=0; i < Channel_list.length; i++)
+                    {
+                        double[] data = IEdk.IEE_GetAverageBandPowers(Channel_list[i]);
+                        if(data != null && data.length == 5){
+                            try {
+                                motion_writer.write(Name_Channel[i] + ",");
+                                for(int j=0; j < data.length;j++)
+                                    addData(data[j]);
+                                motion_writer.newLine();
+                            } catch (IOException e) {
+                                // TODO Auto-generated catch block
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+
+                    break;
+            }
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,21 +121,32 @@ public class NewRecordingActivity extends AppCompatActivity {
                 (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
         mBluetoothAdapter = bluetoothManager.getAdapter();
         if (!mBluetoothAdapter.isEnabled()) {
-            if (!mBluetoothAdapter.isEnabled()) {
-                Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-                startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
-            }
+            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
         }
         mButton = (Button) findViewById(R.id.tempButt);
         mButton.setOnClickListener(new View.OnClickListener(){
             @Override
-            public void onClick(View v){
+            public void onClick(View v) {
                 Log.d(TAG, "Confirm button OnClickListener");
-                Intent i = new Intent(NewRecordingActivity.this, GraphActivity.class);
-                startActivity(i);
-                Log.e("FFTSample","Start Write File");
-                setDataFile();
-                isEnableWriteFile = true;
+                if (mButton.getText().equals("Start"))
+                {
+                    Log.e("FFTSample","Start Write File");
+                    setDataFile();
+                    isEnableWriteFile = true;
+                    mButton.setText("Stop");
+                }
+                else {
+                    Log.e("FFTSample","Stop Write File");
+                    StopWriteFile();
+                    isEnableWriteFile = false;
+                    mButton.setText("Start");
+                }
+//                Intent i = new Intent(NewRecordingActivity.this, GraphActivity.class);
+//                startActivity(i);
+//                Log.e("FFTSample","Start Write File");
+//                setDataFile();
+//                isEnableWriteFile = true;
 
             }
         });
@@ -111,7 +190,7 @@ public class NewRecordingActivity extends AppCompatActivity {
                         handler.sendEmptyMessage(0);
                         handler.sendEmptyMessage(1);
                         if(isEnablGetData && isEnableWriteFile)handler.sendEmptyMessage(2);
-                        Thread.sleep(5);
+                        Thread.sleep(20);
                     }
 
                     catch (Exception ex)
@@ -126,73 +205,6 @@ public class NewRecordingActivity extends AppCompatActivity {
 
 
     }
-
-    Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-
-                case 0:
-                    int state = IEdk.IEE_EngineGetNextEvent();
-                    if (state == IEdkErrorCode.EDK_OK.ToInt()) {
-                        int eventType = IEdk.IEE_EmoEngineEventGetType();
-                        userId = IEdk.IEE_EmoEngineEventGetUserId();
-                        if(eventType == IEdk.IEE_Event_t.IEE_UserAdded.ToInt()){
-                            Log.e("SDK","User added");
-                            IEdk.IEE_FFTSetWindowingType(userId, IEdk.IEE_WindowsType_t.IEE_BLACKMAN);
-                            isEnablGetData = true;
-                        }
-                        if(eventType == IEdk.IEE_Event_t.IEE_UserRemoved.ToInt()){
-                            Log.e("SDK","User removed");
-                            isEnablGetData = false;
-                        }
-                    }
-
-                    break;
-                case 1:
-				/*Connect device with Insight headset*/
-//				int number = IEdk.IEE_GetInsightDeviceCount();
-//				if(number != 0) {
-//					if(!lock){
-//						lock = true;
-//						IEdk.IEE_ConnectInsightDevice(0);
-//					}
-//				}
-                    /**************************************/
-				/*Connect device with Epoc Plus headset*/
-                    int number = IEdk.IEE_GetEpocPlusDeviceCount();
-                    if(number != 0) {
-                        if(!lock){
-                            lock = true;
-                            IEdk.IEE_ConnectEpocPlusDevice(0,false);
-                        }
-                    }
-                    /**************************************/
-                    else lock = false;
-                    break;
-                case 2:
-                    for(int i=0; i < Channel_list.length; i++)
-                    {
-                        double[] data = IEdk.IEE_GetAverageBandPowers(Channel_list[i]);
-                        if(data.length == 5){
-                            try {
-                                motion_writer.write(Name_Channel[i] + ",");
-                                for(int j=0; j < data.length;j++)
-                                    addData(data[j]);
-                                motion_writer.newLine();
-                            } catch (IOException e) {
-                                // TODO Auto-generated catch block
-                                e.printStackTrace();
-                            }
-                        }
-                    }
-
-                    break;
-            }
-
-        }
-
-    };
 
     private void setDataFile() {
         try {
