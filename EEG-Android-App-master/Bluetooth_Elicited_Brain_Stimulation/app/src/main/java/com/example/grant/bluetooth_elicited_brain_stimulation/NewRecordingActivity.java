@@ -65,9 +65,9 @@ public class NewRecordingActivity extends AppCompatActivity {
         });
 
         mChannelList = (ListView) findViewById(R.id.channelList);
-        String[] channels = new String[]{"Channel 1", "Channel 2", "Channel 3",
-                "Channel 4", "Channel 5", "Channel 6", "Channel 7", "Channel 8", "Channel 9",
-                "Channel 10", "Channel 11", "Channel 12", "Channel 13", "Channel 14"};
+        String[] channels = new String[]{"AF3", "F7", "F3",
+                "FC5", "T7", "P7", "O1", "O2", "P8",
+                "T8", "FC6", "F4", "F8", "AF4"};
 
         /**First Param: Context
          * Second Param: Layout for the Row
