@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
         recordsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("Tag", "Wow, shits broke");
+                Log.d("Tag", "Wow, its broke");
                 Intent i = new Intent(MainActivity.this, RecordsActivity.class);
                 startActivity(i);
             }
