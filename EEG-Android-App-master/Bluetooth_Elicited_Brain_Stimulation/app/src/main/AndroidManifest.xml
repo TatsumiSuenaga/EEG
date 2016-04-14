@@ -14,7 +14,7 @@
     <application
         android:name=".legacy.AppProperties"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/brain_icon_flat"
         android:label="BEBS"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
