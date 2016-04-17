@@ -130,7 +130,9 @@ public class GraphActivity extends AppCompatActivity {
             //limit number of visible entries
             mChart.setVisibleXRange(10,10);
             //scroll to last entry
-            mChart.moveViewToX(data.getXValCount()-7);
+            mChart.moveViewToX(data.getXValCount());
+            mChart.getRootView().invalidate();
+            mChart.invalidate();
         }
     }
 
@@ -152,11 +154,12 @@ public class GraphActivity extends AppCompatActivity {
                     });
                     //pause between adds
                     try {
-                        Thread.sleep(500);
+                        Thread.sleep(50);
                     } catch (InterruptedException e) {
                         //not sure what to do with errors
                     }
                 }
+
             }
         }).start();
 
@@ -164,16 +167,16 @@ public class GraphActivity extends AppCompatActivity {
     //method for making dataset
     private LineDataSet createSet() {
         LineDataSet set = new LineDataSet(null, "Beta Waves");
-        set.setDrawCubic(true);
+        set.setDrawCircles(false);
         set.setCubicIntensity(0.2f);
         set.setAxisDependency(YAxis.AxisDependency.LEFT);
-        set.setColor(ColorTemplate.getHoloBlue());
+        set.setColor(Color.rgb(102, 187, 106));
         set.setCircleColor(ColorTemplate.getHoloBlue());
         set.setLineWidth(2f);
         set.setCircleSize(4f);
         set.setFillAlpha(65);
         set.setFillColor(ColorTemplate.getHoloBlue());
-        set.setHighLightColor(Color.WHITE);
+        set.setHighLightColor(Color.BLACK);
         set.setValueTextSize(10f);
 
         return set;
