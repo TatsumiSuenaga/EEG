@@ -1,6 +1,7 @@
 package com.example.grant.bluetooth_elicited_brain_stimulation;
 
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -26,6 +27,8 @@ public class GraphActivity extends AppCompatActivity {
 
     private RelativeLayout mainLayout;
 
+    private String[] channelList;
+
     private LineChart mChart;
 
 
@@ -42,6 +45,8 @@ public class GraphActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Intent i = getIntent();
+        channelList = i.getStringArrayExtra("channelList");
         setContentView(R.layout.activity_graph);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
