@@ -154,6 +154,7 @@ public class GraphActivity extends AppCompatActivity {
                         //not sure what to do with errors
                     }
                 }
+
             }
         }).start();
 
