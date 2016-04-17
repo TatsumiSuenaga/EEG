@@ -30,6 +30,7 @@ public class GraphActivity extends AppCompatActivity {
 
     private LineChart mChart;
 
+    private String[] channelList;
 
     /**private static final String EXTRA_RECORD_READING =
             "com.example.grant.bluetooth_elicited_brain_stimulation.record_reading";**/
@@ -45,6 +46,7 @@ public class GraphActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_graph);
+        channelList = getIntent().getStringArrayExtra("channelList");
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 

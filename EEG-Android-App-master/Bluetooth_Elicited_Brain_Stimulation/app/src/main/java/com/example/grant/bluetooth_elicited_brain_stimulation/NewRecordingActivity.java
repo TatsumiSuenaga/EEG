@@ -1,13 +1,8 @@
 package com.example.grant.bluetooth_elicited_brain_stimulation;
 
 import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothManager;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Environment;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -18,13 +13,12 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.io.BufferedWriter;
+import java.util.HashSet;
+import java.util.Set;
+
 //import com.emotiv.insight.IEdk;
 //import com.emotiv.insight.IEdkErrorCode;
-
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 
 public class NewRecordingActivity extends AppCompatActivity {
 
@@ -36,6 +30,7 @@ public class NewRecordingActivity extends AppCompatActivity {
     private boolean isEnablGetData = false;
     private boolean isEnableWriteFile = false;
     int userId;
+    Set<String> channelSet = new HashSet<>();
     private BufferedWriter motion_writer;
     /**IEdk.IEE_DataChannel_t[] Channel_list = {IEdk.IEE_DataChannel_t.IED_AF3, IEdk.IEE_DataChannel_t.IED_T7, IEdk.IEE_DataChannel_t.IED_Pz,
      IEdk.IEE_DataChannel_t.IED_T8, IEdk.IEE_DataChannel_t.IED_AF4};
@@ -49,17 +44,17 @@ public class NewRecordingActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         //list view will go here
 
-
         mButton = (Button) findViewById(R.id.tempButt);
         mButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
                 Log.d(TAG, "Confirm button OnClickListener");
                 Intent i = new Intent(NewRecordingActivity.this, GraphActivity.class);
+                i.putExtra("channelList", channelSet.toArray(new String[channelSet.size()]));
                 startActivity(i);
                 /**Log.e("FFTSample","Start Write File");
-                setDataFile();
-                isEnableWriteFile = true;**/
+                 setDataFile();
+                 isEnableWriteFile = true;**/
 
             }
         });
