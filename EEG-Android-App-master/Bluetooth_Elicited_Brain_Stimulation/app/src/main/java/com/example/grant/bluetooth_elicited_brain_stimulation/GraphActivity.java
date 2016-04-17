@@ -4,11 +4,9 @@ package com.example.grant.bluetooth_elicited_brain_stimulation;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-
 import android.support.v7.widget.Toolbar;
 import android.widget.AbsListView;
 import android.widget.RelativeLayout;
-
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Legend;
