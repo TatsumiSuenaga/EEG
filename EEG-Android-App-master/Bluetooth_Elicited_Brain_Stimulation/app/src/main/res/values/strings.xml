@@ -7,9 +7,10 @@
     <string name="title_activity_device_communication">DeviceCommunication</string>
     <string name="no_ble">No BLE Devices Found</string>
     <string name="title_activity_main">MainActivity</string>
-    <string name="profile_button">Profile</string>
+    <string name="profile_button">Patient Profiles</string>
     <string name="records_button">Records</string>
     <string name="new_recording_button">New Recording</string>
+    <string name="new_button">New Button</string>
     <string name="title_activity_records">Records</string>
     <string name="title_activity_record_reading">Patient Graph Record</string>
     <string name="title_activity_new_recording">Select Channels</string>
