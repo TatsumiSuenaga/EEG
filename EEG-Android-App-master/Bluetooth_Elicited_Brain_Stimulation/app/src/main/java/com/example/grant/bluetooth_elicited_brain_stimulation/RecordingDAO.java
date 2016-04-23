@@ -47,7 +47,7 @@ public class RecordingDAO extends RecordingDBDAO {
     public ArrayList<Recording> getRecordings() {
         ArrayList<Recording> recordings = new ArrayList<Recording>();
 
-        String query = "SELECT recordings.id, recordings.date, recordings.muscle,"
+        String query = "SELECT recordings.id, recordings.date,"
                 + " patients.id, patients.first_name, patients.last_name FROM "
                 + DatabaseHelper.TABLE_RECORDINGS + " recordings, "
                 + DatabaseHelper.TABLE_PATIENTS + " patients WHERE recordings."
