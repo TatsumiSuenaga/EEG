@@ -22,7 +22,6 @@ public class RecordingDAO extends RecordingDBDAO {
 
         ContentValues values = new ContentValues();
         values.put(DatabaseHelper.COLUMN_RECORDING_DATE, recording.getDate());
-        values.put(DatabaseHelper.COLUMN_RECORDING_MUSCLE, recording.getMuscle());
         values.put(DatabaseHelper.COLUMN_RECORDING_PATIENT_ID, recording.getPatient().getID());
 
         database.insert(DatabaseHelper.TABLE_RECORDINGS, null, values);
@@ -61,12 +60,11 @@ public class RecordingDAO extends RecordingDBDAO {
             Recording recording = new Recording();
             recording.setID(cursor.getInt(0));
             recording.setDate(cursor.getLong(1));
-            recording.setMuscle(cursor.getString(2));
 
             Patient patient = new Patient();
-            patient.setID(cursor.getInt(3));
-            patient.setFirstName(cursor.getString(4));
-            patient.setLastName(cursor.getString(5));
+            patient.setID(cursor.getInt(2));
+            patient.setFirstName(cursor.getString(3));
+            patient.setLastName(cursor.getString(4));
 
             recording.setPatient(patient);
 

@@ -14,6 +14,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public static final String TABLE_PATIENTS = "Patients";
     public static final String TABLE_RECORDINGS = "Recordings";
+    public static final String TABLE_CLINICIANS = "Clinicians";
+
+    //Clinicians Table column names
+    public static final String COLUMN_CLINICIAN_ID = "id";
+    public static final String COLUMN_CLINICIAN_FIRSTNAME = "first_name";
+    public static final String COLUMN_CLINICIAN_LASTNAME = "last_name";
+    public static final String COLUMN_CLINICIAN_EMAIL = "email";
+    public static final String COLUMN_CLINICIAN_PASSWORD = "passwrd";
 
     // Patients Table column names
     public static final String COLUMN_PATIENT_ID = "id";
@@ -21,24 +29,32 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_PATIENT_LASTNAME = "last_name";
     public static final String COLUMN_PATIENT_ADDRESS = "address";
     public static final String COLUMN_PATIENT_EMAIL = "email";
+    public static final String COLUMN_PATIENT_CLINICIAN_ID = "clinician_id";
 
     // Recordings Table column names
     public static final String COLUMN_RECORDING_ID = COLUMN_PATIENT_ID;
     public static final String COLUMN_RECORDING_DATE = "date";
-    public static final String COLUMN_RECORDING_MUSCLE = "muscle";
     public static final String COLUMN_RECORDING_PATIENT_ID = "patient_id";
+
+    public static final String CREATE_TABLE_CLINICIANS = "CREATE TABLE " + TABLE_CLINICIANS
+            + "(" + COLUMN_CLINICIAN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+            + COLUMN_CLINICIAN_FIRSTNAME + " TEXT NOT NULL,"
+            + COLUMN_CLINICIAN_LASTNAME + " TEXT NOT NULL,"
+            + COLUMN_CLINICIAN_EMAIL + " TEXT NOT NULL,"
+            + COLUMN_CLINICIAN_PASSWORD + " TEXT NOT NULL" + ")";
 
     public static final String CREATE_TABLE_PATIENTS = "CREATE TABLE " + TABLE_PATIENTS
             + "(" + COLUMN_PATIENT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
             + COLUMN_PATIENT_FIRSTNAME + " TEXT NOT NULL,"
             + COLUMN_PATIENT_LASTNAME + " TEXT NOT NULL,"
             + COLUMN_PATIENT_ADDRESS + " TEXT NOT NULL,"
-            + COLUMN_PATIENT_EMAIL + " TEXT NOT NULL" + ")";
+            + COLUMN_PATIENT_EMAIL + " TEXT NOT NULL,"
+            + COLUMN_PATIENT_CLINICIAN_ID + " INTEGER,"
+            + " FOREIGN KEY (" + COLUMN_PATIENT_CLINICIAN_ID + ") REFERENCES " + TABLE_CLINICIANS + "(" + COLUMN_CLINICIAN_ID + "))";
 
     public static final String CREATE_TABLE_RECORDINGS = "CREATE TABLE " + TABLE_RECORDINGS
             + "(" + COLUMN_RECORDING_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
             + COLUMN_RECORDING_DATE + " DATETIME NOT NULL,"
-            + COLUMN_RECORDING_MUSCLE + " TEXT NOT NULL,"
             + COLUMN_RECORDING_PATIENT_ID + " INTEGER,"
             + " FOREIGN KEY (" + COLUMN_RECORDING_PATIENT_ID + ") REFERENCES " + TABLE_PATIENTS + "(" + COLUMN_PATIENT_ID + "))";
 
@@ -65,6 +81,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+        db.execSQL(CREATE_TABLE_CLINICIANS);
         db.execSQL(CREATE_TABLE_PATIENTS);
         db.execSQL(CREATE_TABLE_RECORDINGS);
     }
@@ -74,6 +91,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // on upgrade drop older tables
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_RECORDINGS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_PATIENTS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_CLINICIANS);
 
         // create new tables
         onCreate(db);
@@ -84,5 +102,4 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if (db != null && db.isOpen())
             db.close();
     }
-
 }

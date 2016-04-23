@@ -62,6 +62,7 @@ public class PatientDAO extends RecordingDBDAO {
         patient.setAddress(c.getString(c.getColumnIndex(DatabaseHelper.COLUMN_PATIENT_ADDRESS)));
         patient.setEmail(c.getString(c.getColumnIndex(DatabaseHelper.COLUMN_PATIENT_EMAIL)));
 
+        c.close();
         return patient;
     }
 
@@ -83,11 +84,24 @@ public class PatientDAO extends RecordingDBDAO {
             patient.setEmail(cursor.getString(4));
             patients.add(patient);
         }
+        cursor.close();
         return patients;
     }
 
     public void deleteAllPatients(){
         database.execSQL("DROP TABLE IF EXISTS " + DatabaseHelper.TABLE_PATIENTS);
         database.execSQL(DatabaseHelper.CREATE_TABLE_PATIENTS);
+    }
+
+    public int maxID() {
+        String selectQuery = "SELECT MAX(" + DatabaseHelper.COLUMN_PATIENT_ID + ") FROM " + DatabaseHelper.TABLE_PATIENTS + ";";
+
+        Cursor c = database.rawQuery(selectQuery, null);
+
+        if (c.moveToFirst()) {
+            return c.getInt(0);
+        } else {
+            return 0;
+        }
     }
 }

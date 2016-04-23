@@ -12,22 +12,10 @@ import android.widget.Button;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
-    PatientDAO patientDAO;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        patientDAO = new PatientDAO(getApplicationContext());
-
-        Patient patient1 = new Patient("David","Kerns","1600 Penn Ave", "kernsdavida@gmail.com");
-        patient1.setID(1);
-        Patient patient2 = new Patient("Tom", "Carlin","DisneyWorld","noreply@tomcarlin.com");
-        patient2.setID(2);
-        Patient patient3 = new Patient("Val", "Kilmer","Top Gun Lane","val.kilmer@batmanforever.com");
-        patient3.setID(3);
-        patientDAO.createPatient(patient1);
-        patientDAO.createPatient(patient2);
-        patientDAO.createPatient(patient3);
 
         //Change these to listview, maybe
         Button profileButton = (Button) findViewById(R.id.profile_button);
@@ -59,5 +47,4 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
 }
