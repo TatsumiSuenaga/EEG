@@ -48,6 +48,7 @@ public class ProfileActivityFragment extends Fragment {
         ((EditText)v.findViewById(R.id.patient_lName)).setText(mPatient.getLastName());
         ((EditText)v.findViewById(R.id.location)).setText(mPatient.getAddress());
         ((EditText)v.findViewById(R.id.email)).setText(mPatient.getEmail());
+        ((EditText)v.findViewById(R.id.ethnicity)).setText(mPatient.getEthnicity());
         return v;
     }
 

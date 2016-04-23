@@ -18,6 +18,7 @@ public class PatientRegisterActivity extends AppCompatActivity{
     EditText mLast;
     EditText mEmail;
     EditText mAddress;
+    EditText mEthnicity;
     PatientDAO patientDAO;
 
     @Override
@@ -38,6 +39,8 @@ public class PatientRegisterActivity extends AppCompatActivity{
 
         mEmail = (EditText)findViewById(R.id.reg_email_patient);
 
+        mEthnicity = (EditText)findViewById(R.id.reg_ethnicity_patient);
+
         patientDAO = new PatientDAO(getApplicationContext());
 
         create.setOnClickListener(
@@ -49,8 +52,9 @@ public class PatientRegisterActivity extends AppCompatActivity{
                         String last = mLast.getText().toString();
                         String address = mAddress.getText().toString();
                         String email = mEmail.getText().toString();
+                        String ethnicity = mEthnicity.getText().toString();
 
-                        Patient patient = new Patient(first, last, email, address);
+                        Patient patient = new Patient(first, last, email, address, ethnicity);
                         patient.setID(patientDAO.maxID() + 1);
 
                         if(patientDAO.createPatient(patient) == -1){

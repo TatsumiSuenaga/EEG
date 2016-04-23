@@ -51,8 +51,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dip"
                 android:singleLine="true"
-                android:layout_marginBottom="20dip"
-                android:inputType="textEmailAddress"/>
+                android:layout_marginBottom="20dip"/>
             <!-- Email Label -->
             <TextView
                 android:layout_width="match_parent"
@@ -66,6 +65,18 @@
                 android:singleLine="true"
                 android:layout_marginBottom="20dip"
                 android:inputType="textEmailAddress"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#372c24"
+                android:text="Ethnicity"/>
+            <EditText android:id="@+id/reg_ethnicity_patient"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dip"
+                android:singleLine="true"
+                android:layout_marginBottom="20dip"/>
             <!-- Register Button -->
             <Button android:id="@+id/btnRegister_patient"
                 android:layout_width="match_parent"

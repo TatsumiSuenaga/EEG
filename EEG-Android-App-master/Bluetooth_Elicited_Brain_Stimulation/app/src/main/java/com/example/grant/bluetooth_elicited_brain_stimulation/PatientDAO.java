@@ -25,6 +25,7 @@ public class PatientDAO extends RecordingDBDAO {
         values.put(DatabaseHelper.COLUMN_PATIENT_LASTNAME, patient.getLastName());
         values.put(DatabaseHelper.COLUMN_PATIENT_ADDRESS, patient.getAddress());
         values.put(DatabaseHelper.COLUMN_PATIENT_EMAIL, patient.getEmail());
+        values.put(DatabaseHelper.COLUMN_PATIENT_ETHNICITY, patient.getEthnicity());
 
         return database.insert(DatabaseHelper.TABLE_PATIENTS, null, values);
     }
@@ -61,6 +62,7 @@ public class PatientDAO extends RecordingDBDAO {
         patient.setLastName(c.getString(c.getColumnIndex(DatabaseHelper.COLUMN_PATIENT_LASTNAME)));
         patient.setAddress(c.getString(c.getColumnIndex(DatabaseHelper.COLUMN_PATIENT_ADDRESS)));
         patient.setEmail(c.getString(c.getColumnIndex(DatabaseHelper.COLUMN_PATIENT_EMAIL)));
+        patient.setEthnicity((c.getString(c.getColumnIndex(DatabaseHelper.COLUMN_PATIENT_ETHNICITY))));
 
         c.close();
         return patient;
@@ -73,7 +75,8 @@ public class PatientDAO extends RecordingDBDAO {
                         DatabaseHelper.COLUMN_PATIENT_FIRSTNAME,
                         DatabaseHelper.COLUMN_PATIENT_LASTNAME,
                         DatabaseHelper.COLUMN_PATIENT_ADDRESS,
-                        DatabaseHelper.COLUMN_PATIENT_EMAIL}, null, null, null, null, null);
+                        DatabaseHelper.COLUMN_PATIENT_EMAIL,
+                        DatabaseHelper.COLUMN_PATIENT_ETHNICITY}, null, null, null, null, null);
 
         while (cursor.moveToNext()) {
             Patient patient = new Patient();
@@ -82,6 +85,7 @@ public class PatientDAO extends RecordingDBDAO {
             patient.setLastName(cursor.getString(2));
             patient.setAddress(cursor.getString(3));
             patient.setEmail(cursor.getString(4));
+            patient.setEthnicity(cursor.getString(5));
             patients.add(patient);
         }
         cursor.close();

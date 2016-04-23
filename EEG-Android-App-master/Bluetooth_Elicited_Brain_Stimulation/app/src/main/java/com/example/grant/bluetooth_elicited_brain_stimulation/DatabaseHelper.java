@@ -29,6 +29,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_PATIENT_LASTNAME = "last_name";
     public static final String COLUMN_PATIENT_ADDRESS = "address";
     public static final String COLUMN_PATIENT_EMAIL = "email";
+    public static final String COLUMN_PATIENT_ETHNICITY = "ethnicity";
     public static final String COLUMN_PATIENT_CLINICIAN_ID = "clinician_id";
 
     // Recordings Table column names
@@ -36,23 +37,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_RECORDING_DATE = "date";
     public static final String COLUMN_RECORDING_PATIENT_ID = "patient_id";
 
-    public static final String CREATE_TABLE_CLINICIANS = "CREATE TABLE " + TABLE_CLINICIANS
+    public static final String CREATE_TABLE_CLINICIANS = "CREATE TABLE IF NOT EXISTS " + TABLE_CLINICIANS
             + "(" + COLUMN_CLINICIAN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
             + COLUMN_CLINICIAN_FIRSTNAME + " TEXT NOT NULL,"
             + COLUMN_CLINICIAN_LASTNAME + " TEXT NOT NULL,"
             + COLUMN_CLINICIAN_EMAIL + " TEXT NOT NULL,"
             + COLUMN_CLINICIAN_PASSWORD + " TEXT NOT NULL" + ")";
 
-    public static final String CREATE_TABLE_PATIENTS = "CREATE TABLE " + TABLE_PATIENTS
+    public static final String CREATE_TABLE_PATIENTS = "CREATE TABLE IF NOT EXISTS " + TABLE_PATIENTS
             + "(" + COLUMN_PATIENT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
             + COLUMN_PATIENT_FIRSTNAME + " TEXT NOT NULL,"
             + COLUMN_PATIENT_LASTNAME + " TEXT NOT NULL,"
             + COLUMN_PATIENT_ADDRESS + " TEXT NOT NULL,"
             + COLUMN_PATIENT_EMAIL + " TEXT NOT NULL,"
+            + COLUMN_PATIENT_ETHNICITY + " TEXT NOT NULL,"
             + COLUMN_PATIENT_CLINICIAN_ID + " INTEGER,"
             + " FOREIGN KEY (" + COLUMN_PATIENT_CLINICIAN_ID + ") REFERENCES " + TABLE_CLINICIANS + "(" + COLUMN_CLINICIAN_ID + "))";
 
-    public static final String CREATE_TABLE_RECORDINGS = "CREATE TABLE " + TABLE_RECORDINGS
+    public static final String CREATE_TABLE_RECORDINGS = "CREATE TABLE IF NOT EXISTS " + TABLE_RECORDINGS
             + "(" + COLUMN_RECORDING_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
             + COLUMN_RECORDING_DATE + " DATETIME NOT NULL,"
             + COLUMN_RECORDING_PATIENT_ID + " INTEGER,"
@@ -77,6 +79,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             // Enable foreign key constraints
             db.execSQL("PRAGMA foreign_keys=ON;");
         }
+        onCreate(db);
     }
 
     @Override

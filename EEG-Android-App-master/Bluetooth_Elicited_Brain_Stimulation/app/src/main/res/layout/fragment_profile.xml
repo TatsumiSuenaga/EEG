@@ -42,6 +42,12 @@
             />
     </TableRow>
     <TableRow>
+        <EditText android:id="@+id/ethnicity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+    </TableRow>
+    <TableRow>
 
         <Button
             android:id="@+id/save_patient_button"
@@ -51,4 +57,5 @@
             />
 
     </TableRow>
+
 </TableLayout>
