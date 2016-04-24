@@ -32,7 +32,7 @@ import java.text.DateFormat;
 
 public class RecordReadingActivity extends AppCompatActivity {
 
-    private TableLayout mainLayout;
+    private RelativeLayout mainLayout;
     private TextView mPatientText;
     private TextView mGraphText;
     private LineChart mChart;
@@ -56,7 +56,7 @@ public class RecordReadingActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        mainLayout = (TableLayout)findViewById(R.id.recordReadingLayout);
+        mainLayout = (RelativeLayout)findViewById(R.id.staticGraph);
 
         //create line chart
         mChart = new LineChart(this);
