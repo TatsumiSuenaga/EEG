@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorDarkGreen">#599B4E</color>
-    <color name="colorLightGreen">#71BF66</color>
+    <color name="colorLightGreen">#4CAF50</color><!--used to be #71BF66-->
     <color name="colorDarkGray">#463F3F</color>
     <color name="colorLightGray">#9B9797</color>
     <color name="colorDarkRed">#C45757</color>
@@ -9,5 +9,11 @@
     <color name="white">#FFF</color>
     <color name="black">#000</color>
     <color name="bg">#F7F7FF</color>
+
+    <!--Dashboard colors-->
+    <color name="g1">#4DD0E1</color>
+    <color name="g2">#FFB300</color>
+    <color name="g3">#E040FB</color>
+    <color name="g4">#4527A0</color>
 
 </resources>

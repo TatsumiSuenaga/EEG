@@ -4,11 +4,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ListFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
@@ -30,9 +32,9 @@ public class MainActivity extends AppCompatActivity {
         patientDAO.createPatient(patient3);
 
         //Change these to listview, maybe
-        Button profileButton = (Button) findViewById(R.id.profile_button);
-        Button recordsButton = (Button) findViewById(R.id.records_button);
-        Button newRecordingButton = (Button) findViewById(R.id.new_recording_button);
+        LinearLayout profileButton = (LinearLayout) findViewById(R.id.profile_button);
+        LinearLayout recordsButton = (LinearLayout) findViewById(R.id.records_button);
+        LinearLayout newRecordingButton = (LinearLayout) findViewById(R.id.new_recording_button);
 
         profileButton.setOnClickListener(new View.OnClickListener() {
             @Override
