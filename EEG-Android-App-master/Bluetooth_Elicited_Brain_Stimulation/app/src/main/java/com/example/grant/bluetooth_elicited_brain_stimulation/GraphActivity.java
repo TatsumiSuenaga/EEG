@@ -377,19 +377,19 @@ public class GraphActivity extends AppCompatActivity {
         eegData[11] = IEdk.IEE_GetAverageBandPowers(Channel_list[11]);
         eegData[12] = IEdk.IEE_GetAverageBandPowers(Channel_list[12]);
         eegData[13] = IEdk.IEE_GetAverageBandPowers(Channel_list[13]);
-        LineData data = mChart.getData();
+
         int index = 0;
-        for(int i = 0; i < data.getDataSetCount(); i++) {
-            data.addXValue("");
-            data.addEntry(
-                    new Entry((float)eegData[channelIndex[index]][0], data.getDataSetByIndex(i).getEntryCount()),0);
+        for(int i = 0; i < mData.getDataSetCount(); i++) {
+            mData.addXValue("");
+            mData.addEntry(
+                    new Entry((float)eegData[channelIndex[index]][0], mData.getDataSetByIndex(i).getEntryCount()),0);
             index++;
             //notify chart data have changed
             mChart.notifyDataSetChanged();
             //limit number of visible entries
             mChart.setVisibleXRange(10, 10);
             //scroll to last entry
-            mChart.moveViewToX(data.getXValCount());
+            mChart.moveViewToX(mData.getXValCount());
             mChart.getRootView().invalidate();
             mChart.invalidate();
         }
