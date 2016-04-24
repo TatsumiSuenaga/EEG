@@ -13,7 +13,6 @@ public class Recording implements Parcelable{
 
     private int mID;
     private long mDate;
-    private String mMuscle;
     private Patient mPatient;
 
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -24,7 +23,6 @@ public class Recording implements Parcelable{
 
     public Recording(long date, String muscle, Patient patient){
         mDate = date;
-        mMuscle = muscle;
         mPatient = patient;
     }
 
@@ -32,7 +30,6 @@ public class Recording implements Parcelable{
         super();
         mID = in.readInt();
         mDate = in.readLong();
-        mMuscle = in.readString();
         mPatient = in.readParcelable(Patient.class.getClassLoader());
     }
 
@@ -43,10 +40,6 @@ public class Recording implements Parcelable{
     public long getDate() { return mDate; }
 
     public void setDate(long date) { mDate = date; }
-
-    public String getMuscle() { return mMuscle; }
-
-    public void setMuscle(String muscle) { mMuscle = muscle; }
 
     public Patient getPatient() { return mPatient; }
 
@@ -66,7 +59,6 @@ public class Recording implements Parcelable{
     public void writeToParcel(Parcel parcel, int flags) {
         parcel.writeInt(getID());
         parcel.writeLong(getDate());
-        parcel.writeString(getMuscle());
         parcel.writeParcelable(getPatient(), flags);
     }
 

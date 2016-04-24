@@ -2,6 +2,7 @@ package com.example.grant.bluetooth_elicited_brain_stimulation;
 
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -14,8 +15,6 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import java.io.BufferedWriter;
-import java.util.HashSet;
-import java.util.Set;
 
 //import com.emotiv.insight.IEdk;
 //import com.emotiv.insight.IEdkErrorCode;
@@ -30,7 +29,7 @@ public class NewRecordingActivity extends AppCompatActivity {
     private boolean isEnablGetData = false;
     private boolean isEnableWriteFile = false;
     int userId;
-    Set<String> channelSet = new HashSet<>();
+    boolean[] channelList = new boolean[14];
     private BufferedWriter motion_writer;
     /**IEdk.IEE_DataChannel_t[] Channel_list = {IEdk.IEE_DataChannel_t.IED_AF3, IEdk.IEE_DataChannel_t.IED_T7, IEdk.IEE_DataChannel_t.IED_Pz,
      IEdk.IEE_DataChannel_t.IED_T8, IEdk.IEE_DataChannel_t.IED_AF4};
@@ -44,17 +43,18 @@ public class NewRecordingActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         //list view will go here
 
+
         mButton = (Button) findViewById(R.id.tempButt);
         mButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
                 Log.d(TAG, "Confirm button OnClickListener");
                 Intent i = new Intent(NewRecordingActivity.this, GraphActivity.class);
-                i.putExtra("channelList", channelSet.toArray(new String[channelSet.size()]));
+                i.putExtra("channelList", channelList);
                 startActivity(i);
                 /**Log.e("FFTSample","Start Write File");
-                 setDataFile();
-                 isEnableWriteFile = true;**/
+                setDataFile();
+                isEnableWriteFile = true;**/
 
             }
         });
@@ -69,7 +69,7 @@ public class NewRecordingActivity extends AppCompatActivity {
          * Third Param: TextView ID
          * Fourth Param: Array of Data
          */
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(NewRecordingActivity.this,
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(NewRecordingActivity.this,
                 android.R.layout.simple_list_item_1, android.R.id.text1, channels );
 
         //Temporary adapter just for UI, this will be later made into different fragment probably
@@ -80,6 +80,16 @@ public class NewRecordingActivity extends AppCompatActivity {
                 String ch = (String) mChannelList.getItemAtPosition(position);
                 Toast.makeText(getApplicationContext(),
                         ch + " is turned on", Toast.LENGTH_SHORT).show();
+                if(channelList[position])
+                {
+                    channelList[position] = false;
+                    view.setBackgroundColor(Color.WHITE);
+                }
+                else
+                {
+                    channelList[position] = true;
+                    view.setBackgroundColor(Color.parseColor("#66ff33"));
+                }
             }
         });
 

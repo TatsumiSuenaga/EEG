@@ -88,6 +88,17 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.grant.bluetooth_elicited_brain_stimulation.ProfileListActivity" />
         </activity>
+        <activity
+            android:name=".LoginActivity"
+            android:label="Log In to your Account">
+        </activity>
+        <activity android:name=".RegisterActivity"
+            android:label="Register New Account">
+        </activity>
+        <activity android:name=".PatientRegisterActivity"
+            android:label="Register New Patient">
+        </activity>
+
     </application>
 
 </manifest>
