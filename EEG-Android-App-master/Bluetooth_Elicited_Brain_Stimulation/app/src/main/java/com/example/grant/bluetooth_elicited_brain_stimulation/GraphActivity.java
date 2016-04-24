@@ -26,6 +26,8 @@ import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.highlight.Highlight;
+import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.io.BufferedWriter;
@@ -33,6 +35,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 
 /**
  * Created by alex m on 3/9/16
@@ -45,7 +48,9 @@ public class GraphActivity extends AppCompatActivity {
 
     private boolean[] channelList;
 
+    private ArrayList<LineDataSet> mDataSets;
     private LineChart mChart;
+    private LineData mData;
 
     private final MyHandler handler = new MyHandler(this);
     private static final String TAG = NewRecordingActivity.class.getSimpleName();
@@ -58,6 +63,7 @@ public class GraphActivity extends AppCompatActivity {
     int userId;
     private BufferedWriter motion_writer;
 
+
     IEdk.IEE_DataChannel_t[] Channel_list = {
             IEdk.IEE_DataChannel_t.IED_AF3, IEdk.IEE_DataChannel_t.IED_T7, IEdk.IEE_DataChannel_t.IED_T8,
             IEdk.IEE_DataChannel_t.IED_AF4, IEdk.IEE_DataChannel_t.IED_F3, IEdk.IEE_DataChannel_t.IED_F4,
@@ -67,7 +73,8 @@ public class GraphActivity extends AppCompatActivity {
 
     String[] Name_Channel = {"AF3","T7","T8","AF4", "F3", "F4", "F7", "F8", "FC5", "FC6", "P7", "P8", "O1", "O2"};
 
-    private double[] eegData;
+    private double[][] eegData;
+    private int[] channelIndex;
 
 
     /**private static final String EXTRA_RECORD_READING =
@@ -138,8 +145,23 @@ public class GraphActivity extends AppCompatActivity {
 //                        }
 //                    }
 
-                    eegData = IEdk.IEE_GetAverageBandPowers(Channel_list[0]);
-                    if(eegData != null && eegData.length == 5){
+
+                    eegData[0] = IEdk.IEE_GetAverageBandPowers(Channel_list[0]);
+                    eegData[1] = IEdk.IEE_GetAverageBandPowers(Channel_list[1]);
+                    eegData[2] = IEdk.IEE_GetAverageBandPowers(Channel_list[2]);
+                    eegData[3] = IEdk.IEE_GetAverageBandPowers(Channel_list[3]);
+                    eegData[4] = IEdk.IEE_GetAverageBandPowers(Channel_list[4]);
+                    eegData[5] = IEdk.IEE_GetAverageBandPowers(Channel_list[5]);
+                    eegData[6] = IEdk.IEE_GetAverageBandPowers(Channel_list[6]);
+                    eegData[7] = IEdk.IEE_GetAverageBandPowers(Channel_list[7]);
+                    eegData[8] = IEdk.IEE_GetAverageBandPowers(Channel_list[8]);
+                    eegData[9] = IEdk.IEE_GetAverageBandPowers(Channel_list[9]);
+                    eegData[10] = IEdk.IEE_GetAverageBandPowers(Channel_list[10]);
+                    eegData[11] = IEdk.IEE_GetAverageBandPowers(Channel_list[11]);
+                    eegData[12] = IEdk.IEE_GetAverageBandPowers(Channel_list[12]);
+                    eegData[13] = IEdk.IEE_GetAverageBandPowers(Channel_list[13]);
+
+                    if(eegData != null){
                         addEntry();
                     }
 
@@ -165,35 +187,18 @@ public class GraphActivity extends AppCompatActivity {
         mainLayout.addView(mChart, new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, AbsListView.LayoutParams.MATCH_PARENT));
         //mainLayout.addView(mChart);
 
-        //customize line chart
-        mChart.setDescription("this is a graph");
+        //initialize mDataSets from channels selected
+        initializeDataChannels();
 
-        mChart.setNoDataTextDescription("test data");
-
-        //enable value highlighting
-        mChart.setHighlightPerTapEnabled(true);
-
-        //enable touch gestures
-        mChart.setTouchEnabled(true);
-
-        //enable scaling and dragging
-        mChart.setDragEnabled(true);
-        mChart.setScaleEnabled(true);
-        mChart.setDrawGridBackground(false);
-
-        //enable pinch zoom to avoid scaling x and y axes separately
-        mChart.setPinchZoom(true);
+        //initialize mChart
+        configureChart();
 
         //alternative background color
-        mChart.setBackgroundColor(Color.LTGRAY);
+       // mChart.setBackgroundColor(Color.LTGRAY);
 
-        //work with data
-        LineData data = new LineData();
-        data.setValueTextColor(Color.WHITE);
 
-        //add data to chart, will need to have function
-        // to dynamically update with bluetooth data
-        mChart.setData(data);
+        //data.setValueTextColor(Color.WHITE);
+
 
         //get legend object and customize
         Legend legend = mChart.getLegend();
@@ -270,23 +275,64 @@ public class GraphActivity extends AppCompatActivity {
 //        processingThread.start();
 
     }
+
+    //adds all selected channels to the ArrayList of dataSets so they can be displayed
+    private void initializeDataChannels() {
+        int counter = 0;
+        for(int i = 0; i<channelList.length;i++) {
+            //if the channel is true, it was selected for data display
+            if(channelList[i]) {
+                LineDataSet dataSet = new LineDataSet(null, Name_Channel[i]);
+                mDataSets.add(dataSet);
+                channelIndex[counter] = i;
+                counter++;
+            }
+        }
+    }
+
+    private void configureChart() {
+        mChart.setDescription("");
+        mChart.setDrawGridBackground(false);
+        mChart.setData(new LineData());
+        mChart.getAxisRight().setEnabled(false);
+        mChart.setTouchEnabled(true);
+        mChart.setScaleEnabled(false);
+        mChart.setPinchZoom(true);
+        mChart.getXAxis().setDrawAxisLine(false);
+        mChart.getXAxis().setDrawGridLines(false);
+        mChart.getAxisLeft().setDrawGridLines(false);
+
+        mChart.getAxisLeft().setAxisMinValue(0);
+        mChart.getAxisLeft().setAxisMaxValue(10);
+
+
+        //adds all dataSets to mData to be displayed on graph
+        mData= new LineData();
+        for(LineDataSet mSet : mDataSets) {
+            mData.addDataSet(mSet);
+        }
+
+        mChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
+            @Override
+            public void onValueSelected(Entry e, int dataSetIndex, Highlight h) {
+                mChart.setDescription(Float.toString(e.getVal()) + " mV");
+            }
+
+            @Override
+            public void onNothingSelected() {
+                mChart.setDescription("");
+            }
+        });
+
+    }
     private void addEntry() {
         LineData data = mChart.getData();
-
-        if (data !=null) {
-
-            LineDataSet set = data.getDataSetByIndex(0);
-
-            if(set==null){
-                //create if null
-                set = createSet();
-                data.addDataSet(set);
-            }
-            data.addXValue("");
-            data.addEntry(
-                    new Entry((float) eegData[1], set
-                            .getEntryCount()), 0);
-
+        int index = 0;
+        for(LineDataSet dataSet : mDataSets) {
+            mData.addXValue("");
+            mData.addEntry(
+                    new Entry((float)eegData[channelIndex[index]][0], dataSet.getEntryCount()),0);
+            index++;
             //notify chart data have changed
             mChart.notifyDataSetChanged();
             //limit number of visible entries
@@ -312,7 +358,7 @@ public class GraphActivity extends AppCompatActivity {
                     {
                         handler.sendEmptyMessage(0);
                         handler.sendEmptyMessage(1);
-//                        if(isEnablGetData && isEnableWriteFile)handler.sendEmptyMessage(2);
+//                        if(isEnableGetData && isEnableWriteFile)handler.sendEmptyMessage(2);
                         if(isEnablGetData)handler.sendEmptyMessage(2);
                         Thread.sleep(200);
                     }

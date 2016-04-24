@@ -25,6 +25,7 @@ public class PatientDAO extends RecordingDBDAO {
         values.put(DatabaseHelper.COLUMN_PATIENT_LASTNAME, patient.getLastName());
         values.put(DatabaseHelper.COLUMN_PATIENT_ADDRESS, patient.getAddress());
         values.put(DatabaseHelper.COLUMN_PATIENT_EMAIL, patient.getEmail());
+        values.put(DatabaseHelper.COLUMN_PATIENT_ETHNICITY, patient.getEthnicity());
 
         return database.insert(DatabaseHelper.TABLE_PATIENTS, null, values);
     }
@@ -61,19 +62,45 @@ public class PatientDAO extends RecordingDBDAO {
         patient.setLastName(c.getString(c.getColumnIndex(DatabaseHelper.COLUMN_PATIENT_LASTNAME)));
         patient.setAddress(c.getString(c.getColumnIndex(DatabaseHelper.COLUMN_PATIENT_ADDRESS)));
         patient.setEmail(c.getString(c.getColumnIndex(DatabaseHelper.COLUMN_PATIENT_EMAIL)));
+        patient.setEthnicity((c.getString(c.getColumnIndex(DatabaseHelper.COLUMN_PATIENT_ETHNICITY))));
 
         c.close();
         return patient;
     }
 
-    public ArrayList<Patient> getPatients() {
+    public Patient getPatient(String email){
+        String selectQuery = "SELECT * FROM " + DatabaseHelper.TABLE_PATIENTS + " WHERE "
+                + DatabaseHelper.COLUMN_PATIENT_ETHNICITY + " = '" + email + "';";
+
+        Patient patient = new Patient();
+        Cursor c = database.rawQuery(selectQuery, null);
+
+        if(c.moveToFirst()){
+            patient.setID(c.getInt(c.getColumnIndex(DatabaseHelper.COLUMN_PATIENT_ID)));
+            patient.setFirstName(c.getString(c.getColumnIndex(DatabaseHelper.COLUMN_PATIENT_FIRSTNAME)));
+            patient.setLastName(c.getString(c.getColumnIndex(DatabaseHelper.COLUMN_PATIENT_LASTNAME)));
+            patient.setAddress(c.getString(c.getColumnIndex(DatabaseHelper.COLUMN_PATIENT_ADDRESS)));
+            patient.setEmail(c.getString(c.getColumnIndex(DatabaseHelper.COLUMN_PATIENT_EMAIL)));
+            patient.setEthnicity(c.getString(c.getColumnIndex(DatabaseHelper.COLUMN_PATIENT_ETHNICITY)));
+        }
+        else{
+            patient.setID(-1);
+        }
+
+
+        c.close();
+        return patient;
+    }
+
+            public ArrayList<Patient> getPatients() {
         ArrayList<Patient> patients = new ArrayList<Patient>();
         Cursor cursor = database.query(DatabaseHelper.TABLE_PATIENTS,
                 new String[] { DatabaseHelper.COLUMN_PATIENT_ID,
                         DatabaseHelper.COLUMN_PATIENT_FIRSTNAME,
                         DatabaseHelper.COLUMN_PATIENT_LASTNAME,
                         DatabaseHelper.COLUMN_PATIENT_ADDRESS,
-                        DatabaseHelper.COLUMN_PATIENT_EMAIL}, null, null, null, null, null);
+                        DatabaseHelper.COLUMN_PATIENT_EMAIL,
+                        DatabaseHelper.COLUMN_PATIENT_ETHNICITY}, null, null, null, null, null);
 
         while (cursor.moveToNext()) {
             Patient patient = new Patient();
@@ -82,6 +109,7 @@ public class PatientDAO extends RecordingDBDAO {
             patient.setLastName(cursor.getString(2));
             patient.setAddress(cursor.getString(3));
             patient.setEmail(cursor.getString(4));
+            patient.setEthnicity(cursor.getString(5));
             patients.add(patient);
         }
         cursor.close();

@@ -14,17 +14,19 @@ public class Patient implements Parcelable{
     private String mLastName;
     private String mAddress;
     private String mEmail;
+    private String mEthnicity;
 
     public Patient() {
         super();
     }
 
-    public Patient(String firstName, String lastName, String address, String email) {
+    public Patient(String firstName, String lastName, String address, String email, String ethnicity) {
         super();
         mFirstName = firstName;
         mLastName = lastName;
         mAddress = address;
         mEmail = email;
+        mEthnicity = ethnicity;
     }
 
     private Patient(Parcel in){
@@ -34,6 +36,7 @@ public class Patient implements Parcelable{
         mLastName = in.readString();
         mAddress = in.readString();
         mEmail = in.readString();
+        mEthnicity = in.readString();
     }
 
     public int getID() { return mID; }
@@ -56,6 +59,10 @@ public class Patient implements Parcelable{
 
     public void setEmail(String email) { mEmail = email; }
 
+    public String getEthnicity() { return mEthnicity;}
+
+    public void setEthnicity(String ethnicity) { mEthnicity = ethnicity;}
+
     @Override
     public String toString(){
         return mID + " " + mLastName;
@@ -73,6 +80,7 @@ public class Patient implements Parcelable{
         parcel.writeString(getLastName());
         parcel.writeString(getAddress());
         parcel.writeString(getEmail());
+        parcel.writeString(getEthnicity());
     }
 
     public static final Parcelable.Creator<Patient> CREATOR = new Parcelable.Creator<Patient>() {
