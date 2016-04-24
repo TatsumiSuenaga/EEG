@@ -2,6 +2,7 @@ package com.example.grant.bluetooth_elicited_brain_stimulation;
 
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -15,6 +16,8 @@ import android.widget.Toast;
  */
 public class LoginActivity extends AppCompatActivity {
 
+    private final String PREFS_NAME = "MyPrefsFile";
+    private final static String OPT_EMAIL="email";
     EditText mEmail;
     EditText mPassword;
     Button mLogin;
@@ -24,6 +27,19 @@ public class LoginActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        DatabaseHelper db = new DatabaseHelper(this);
+        db.getWritableDatabase();
+
+        // Fetch shared preferences file
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+
+        // Check first time login
+        if (!settings.getBoolean("first_time_login", true)) {
+            // Bring up the Gallery
+            startActivity(new Intent(this, MainActivity.class));
+            finish();
+        }
 
         TextView registerScreen = (TextView) findViewById(R.id.link_to_register);
 
@@ -62,8 +78,18 @@ public class LoginActivity extends AppCompatActivity {
                         }
 
                         if(can_login){
+                            // Get preferences file
+                            SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+
+                            // Check if first time login value is available
+                            if (settings.getBoolean("first_time_login", true)) {
+                                // Update value to be false
+                                settings.edit().putBoolean("first_time_login", false).apply();
+                                settings.edit().putString(OPT_EMAIL, email).apply();
+                            }
                             Intent i = new Intent(LoginActivity.this, MainActivity.class);
                             startActivity(i);
+                            finish();
                         }
                         else{
                             Toast toast = Toast.makeText(getApplicationContext(), "Password or email incorrect", Toast.LENGTH_SHORT);

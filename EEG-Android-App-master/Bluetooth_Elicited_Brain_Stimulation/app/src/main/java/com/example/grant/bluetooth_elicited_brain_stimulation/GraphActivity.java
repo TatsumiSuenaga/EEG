@@ -48,7 +48,7 @@ public class GraphActivity extends AppCompatActivity {
 
     private boolean[] channelList;
 
-    private ArrayList<LineDataSet> mDataSets;
+    private ArrayList<LineDataSet> mDataSets = new ArrayList<>();
     private LineChart mChart;
     private LineData mData;
 
@@ -73,8 +73,9 @@ public class GraphActivity extends AppCompatActivity {
 
     String[] Name_Channel = {"AF3","T7","T8","AF4", "F3", "F4", "F7", "F8", "FC5", "FC6", "P7", "P8", "O1", "O2"};
 
-    private double[][] eegData;
+    private final double[][] eegData = new double[14][5];
     private int[] channelIndex;
+    private int number;
 
 
     /**private static final String EXTRA_RECORD_READING =
@@ -117,8 +118,6 @@ public class GraphActivity extends AppCompatActivity {
 
                     break;
                 case 1:
-                    /*Connect device with Epoc Plus headset*/
-                    int number = IEdk.IEE_GetEpocPlusDeviceCount();
                     if(number != 0) {
                         if(!lock){
                             lock = true;
@@ -144,22 +143,6 @@ public class GraphActivity extends AppCompatActivity {
 //                            }
 //                        }
 //                    }
-
-
-                    eegData[0] = IEdk.IEE_GetAverageBandPowers(Channel_list[0]);
-                    eegData[1] = IEdk.IEE_GetAverageBandPowers(Channel_list[1]);
-                    eegData[2] = IEdk.IEE_GetAverageBandPowers(Channel_list[2]);
-                    eegData[3] = IEdk.IEE_GetAverageBandPowers(Channel_list[3]);
-                    eegData[4] = IEdk.IEE_GetAverageBandPowers(Channel_list[4]);
-                    eegData[5] = IEdk.IEE_GetAverageBandPowers(Channel_list[5]);
-                    eegData[6] = IEdk.IEE_GetAverageBandPowers(Channel_list[6]);
-                    eegData[7] = IEdk.IEE_GetAverageBandPowers(Channel_list[7]);
-                    eegData[8] = IEdk.IEE_GetAverageBandPowers(Channel_list[8]);
-                    eegData[9] = IEdk.IEE_GetAverageBandPowers(Channel_list[9]);
-                    eegData[10] = IEdk.IEE_GetAverageBandPowers(Channel_list[10]);
-                    eegData[11] = IEdk.IEE_GetAverageBandPowers(Channel_list[11]);
-                    eegData[12] = IEdk.IEE_GetAverageBandPowers(Channel_list[12]);
-                    eegData[13] = IEdk.IEE_GetAverageBandPowers(Channel_list[13]);
 
                     if(eegData != null){
                         addEntry();
@@ -249,6 +232,7 @@ public class GraphActivity extends AppCompatActivity {
 //        });
 
         IEdk.IEE_EngineConnect(this, "");
+
 //        Thread processingThread = new Thread()
 //        {
 //            @Override
@@ -279,6 +263,7 @@ public class GraphActivity extends AppCompatActivity {
     //adds all selected channels to the ArrayList of dataSets so they can be displayed
     private void initializeDataChannels() {
         int counter = 0;
+        channelIndex = new int[channelList.length];
         for(int i = 0; i<channelList.length;i++) {
             //if the channel is true, it was selected for data display
             if(channelList[i]) {
@@ -345,7 +330,6 @@ public class GraphActivity extends AppCompatActivity {
     private void configureChart() {
         mChart.setDescription("");
         mChart.setDrawGridBackground(false);
-        mChart.setData(new LineData());
         mChart.getAxisRight().setEnabled(false);
         mChart.setTouchEnabled(true);
         mChart.setScaleEnabled(false);
@@ -363,6 +347,7 @@ public class GraphActivity extends AppCompatActivity {
         for(LineDataSet mSet : mDataSets) {
             mData.addDataSet(mSet);
         }
+        mChart.setData(mData);
 
         mChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
             @Override
@@ -378,12 +363,26 @@ public class GraphActivity extends AppCompatActivity {
 
     }
     private void addEntry() {
+        eegData[0] = IEdk.IEE_GetAverageBandPowers(Channel_list[0]);
+        eegData[1] = IEdk.IEE_GetAverageBandPowers(Channel_list[1]);
+        eegData[2] = IEdk.IEE_GetAverageBandPowers(Channel_list[2]);
+        eegData[3] = IEdk.IEE_GetAverageBandPowers(Channel_list[3]);
+        eegData[4] = IEdk.IEE_GetAverageBandPowers(Channel_list[4]);
+        eegData[5] = IEdk.IEE_GetAverageBandPowers(Channel_list[5]);
+        eegData[6] = IEdk.IEE_GetAverageBandPowers(Channel_list[6]);
+        eegData[7] = IEdk.IEE_GetAverageBandPowers(Channel_list[7]);
+        eegData[8] = IEdk.IEE_GetAverageBandPowers(Channel_list[8]);
+        eegData[9] = IEdk.IEE_GetAverageBandPowers(Channel_list[9]);
+        eegData[10] = IEdk.IEE_GetAverageBandPowers(Channel_list[10]);
+        eegData[11] = IEdk.IEE_GetAverageBandPowers(Channel_list[11]);
+        eegData[12] = IEdk.IEE_GetAverageBandPowers(Channel_list[12]);
+        eegData[13] = IEdk.IEE_GetAverageBandPowers(Channel_list[13]);
         LineData data = mChart.getData();
         int index = 0;
-        for(LineDataSet dataSet : mDataSets) {
-            mData.addXValue("");
-            mData.addEntry(
-                    new Entry((float)eegData[channelIndex[index]][0], dataSet.getEntryCount()),0);
+        for(int i = 0; i < data.getDataSetCount(); i++) {
+            data.addXValue("");
+            data.addEntry(
+                    new Entry((float)eegData[channelIndex[index]][0], data.getDataSetByIndex(i).getEntryCount()),0);
             index++;
             //notify chart data have changed
             mChart.notifyDataSetChanged();
@@ -408,6 +407,8 @@ public class GraphActivity extends AppCompatActivity {
                 {
                     try
                     {
+                        /*Connect device with Epoc Plus headset*/
+                        number = IEdk.IEE_GetEpocPlusDeviceCount();
                         handler.sendEmptyMessage(0);
                         handler.sendEmptyMessage(1);
 //                        if(isEnableGetData && isEnableWriteFile)handler.sendEmptyMessage(2);
