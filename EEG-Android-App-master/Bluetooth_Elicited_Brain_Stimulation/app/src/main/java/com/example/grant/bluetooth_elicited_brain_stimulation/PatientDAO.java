@@ -68,7 +68,31 @@ public class PatientDAO extends RecordingDBDAO {
         return patient;
     }
 
-    public ArrayList<Patient> getPatients() {
+    public Patient getPatient(String email){
+        String selectQuery = "SELECT * FROM " + DatabaseHelper.TABLE_PATIENTS + " WHERE "
+                + DatabaseHelper.COLUMN_PATIENT_ETHNICITY + " = '" + email + "';";
+
+        Patient patient = new Patient();
+        Cursor c = database.rawQuery(selectQuery, null);
+
+        if(c.moveToFirst()){
+            patient.setID(c.getInt(c.getColumnIndex(DatabaseHelper.COLUMN_PATIENT_ID)));
+            patient.setFirstName(c.getString(c.getColumnIndex(DatabaseHelper.COLUMN_PATIENT_FIRSTNAME)));
+            patient.setLastName(c.getString(c.getColumnIndex(DatabaseHelper.COLUMN_PATIENT_LASTNAME)));
+            patient.setAddress(c.getString(c.getColumnIndex(DatabaseHelper.COLUMN_PATIENT_ADDRESS)));
+            patient.setEmail(c.getString(c.getColumnIndex(DatabaseHelper.COLUMN_PATIENT_EMAIL)));
+            patient.setEthnicity(c.getString(c.getColumnIndex(DatabaseHelper.COLUMN_PATIENT_ETHNICITY)));
+        }
+        else{
+            patient.setID(-1);
+        }
+
+
+        c.close();
+        return patient;
+    }
+
+            public ArrayList<Patient> getPatients() {
         ArrayList<Patient> patients = new ArrayList<Patient>();
         Cursor cursor = database.query(DatabaseHelper.TABLE_PATIENTS,
                 new String[] { DatabaseHelper.COLUMN_PATIENT_ID,
