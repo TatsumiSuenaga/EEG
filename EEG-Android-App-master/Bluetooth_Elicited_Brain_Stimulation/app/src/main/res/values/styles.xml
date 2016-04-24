@@ -17,29 +17,33 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
 
-    <style name = "DashboardButton1">
-        <item name = "android:textSize">14dp</item >
-        <item name = "android:textColor">@color/bg</item >
-        <item name = "android:background">@color/g1</item >
+    <style name="DashboardButton1">
+        <item name="android:textSize">14dp</item>
+        <item name="android:textColor">@color/bg</item>
+        <item name="android:background">@drawable/ripple2</item>
     </style>
-    <style name = "DashboardButton2">
-        <item name = "android:textSize">14dp</item >
-        <item name = "android:textColor">@color/bg</item >
-        <item name = "android:background">@color/g2</item >
+
+    <style name="DashboardButton2">
+        <item name="android:textSize">14dp</item>
+        <item name="android:textColor">@color/bg</item>
+        <item name="android:background">@drawable/ripple3</item>
     </style>
-    <style name = "DashboardButton3">
-        <item name = "android:textSize">14dp</item >
-        <item name = "android:textColor">@color/bg</item >
-        <item name = "android:background">@color/g3</item >
+
+    <style name="DashboardButton3">
+        <item name="android:textSize">14dp</item>
+        <item name="android:textColor">@color/bg</item>
+        <item name="android:background">@drawable/ripple</item>
     </style>
-    <style name = "DashboardButton4">
-        <item name = "android:textSize">14dp</item >
-        <item name = "android:textColor">@color/bg</item >
-        <item name = "android:background">@color/g4</item >
+
+    <style name="DashboardButton4">
+        <item name="android:textSize">14dp</item>
+        <item name="android:textColor">@color/bg</item>
+        <item name="android:background">@drawable/ripple4</item>
     </style>
+
     <style name="text">
-        <item name = "android:textSize">14dp</item >
-        <item name = "android:textColor">@color/bg</item >
+        <item name="android:textSize">14dp</item>
+        <item name="android:textColor">@color/bg</item>
         <item name="android:textStyle">bold</item>
     </style>
 </resources>

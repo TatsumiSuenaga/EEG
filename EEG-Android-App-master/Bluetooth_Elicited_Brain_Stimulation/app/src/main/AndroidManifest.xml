@@ -69,7 +69,6 @@
             android:label="Realtime EEG Graph"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
-
         <activity
             android:name=".ProfileListActivity"
             android:label="@string/title_activity_profile_list"
@@ -77,7 +76,7 @@
             android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.grant.bluetooth_elicited_brain_stimulation.MainActivity" />
+                android:value="com.example.grant.bluetooth_elicited_brain_stimulation.MainActivity"/>
         </activity>
         <activity
             android:name=".ProfileActivity"
@@ -86,19 +85,25 @@
             android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.grant.bluetooth_elicited_brain_stimulation.ProfileListActivity" />
+                android:value="com.example.grant.bluetooth_elicited_brain_stimulation.ProfileListActivity"/>
         </activity>
         <activity
             android:name=".LoginActivity"
             android:label="Log In to your Account">
         </activity>
-        <activity android:name=".RegisterActivity"
+        <activity
+            android:name=".RegisterActivity"
             android:label="Register New Account">
         </activity>
-        <activity android:name=".PatientRegisterActivity"
+        <activity
+            android:name=".PatientRegisterActivity"
             android:label="Register New Patient">
         </activity>
-
+        <activity
+            android:name=".TutorialActivity"
+            android:label="@string/title_activity_tutorial"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
     </application>
 
 </manifest>

@@ -29,19 +29,7 @@ public class RecordsActivity extends AppCompatActivity {
 
         ListView recordingsLV = (ListView)findViewById(R.id.listViewRecords);
 
-        //Test with 1 patient, 2 records
-        PatientDAO patientDAO = new PatientDAO(this);
         RecordingDAO recordingDAO = new RecordingDAO(this);
-
-        Patient patient = new Patient("David", "Kerns","12223", "osu.edu", "Caucasian");
-        patientDAO.createPatient(patient);
-
-        Patient test = patientDAO.getPatient(1);
-        final Recording recording = new Recording(System.currentTimeMillis(),"Funny bone",test);
-        final Recording recording2 = new Recording(System.currentTimeMillis()+1500000,"Not so funny bone",test);
-
-        recordingDAO.createRecording(recording);
-        recordingDAO.createRecording(recording2);
 
         recordingsList = recordingDAO.getRecordings();
 
@@ -58,7 +46,6 @@ public class RecordsActivity extends AppCompatActivity {
             }
         });
 
-        patientDAO.close();
 
     }
 

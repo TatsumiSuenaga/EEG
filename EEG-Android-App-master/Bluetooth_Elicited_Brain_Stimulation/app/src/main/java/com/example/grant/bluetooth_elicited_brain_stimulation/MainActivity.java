@@ -19,10 +19,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //Change these to listview, maybe
+        //These buttons tho
         LinearLayout profileButton = (LinearLayout) findViewById(R.id.profile_button);
         LinearLayout recordsButton = (LinearLayout) findViewById(R.id.records_button);
         LinearLayout newRecordingButton = (LinearLayout) findViewById(R.id.new_recording_button);
+        LinearLayout tutorialButton = (LinearLayout) findViewById(R.id.tutorial_button);
 
         profileButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -45,6 +46,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(MainActivity.this, NewRecordingActivity.class);
+                startActivity(i);
+            }
+        });
+
+        tutorialButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v){
+                Intent i = new Intent(MainActivity.this, TutorialActivity.class);
                 startActivity(i);
             }
         });

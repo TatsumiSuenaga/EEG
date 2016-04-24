@@ -17,4 +17,6 @@
     <string name="save_patient_button">Save Patient</string>
     <string name="title_activity_profile_list">Patients</string>
     <string name="title_activity_profile">Patient Info</string>
+    <string name="title_activity_tutorial">TutorialActivity</string>
+    <string name="tutorial_text">This is where the tutorial would go</string>
 </resources>
