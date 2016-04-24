@@ -183,23 +183,7 @@ public class GraphActivity extends AppCompatActivity {
         //data.setValueTextColor(Color.WHITE);
 
 
-        //get legend object and customize
-        Legend legend = mChart.getLegend();
-        legend.setForm(Legend.LegendForm.LINE);
-        legend.setTextColor(Color.WHITE);
 
-        XAxis xAxis = mChart.getXAxis();
-        xAxis.setTextColor(Color.WHITE);
-        xAxis.setDrawGridLines(false);
-        xAxis.setAvoidFirstLastClipping(true);
-
-        YAxis yAxis = mChart.getAxisLeft();
-        yAxis.setTextColor(Color.WHITE);
-        yAxis.setAxisMaxValue(100f);
-        yAxis.setDrawGridLines(true);
-
-        YAxis yAxis2 = mChart.getAxisRight();
-        yAxis2.setEnabled(false);
 
         // NEW CODE
 
@@ -328,7 +312,7 @@ public class GraphActivity extends AppCompatActivity {
     }
 
     private void configureChart() {
-        mChart.setDescription("");
+        mChart.setDescription("fuck the police");
         mChart.setDrawGridBackground(false);
         mChart.getAxisRight().setEnabled(false);
         mChart.setTouchEnabled(true);
@@ -336,11 +320,12 @@ public class GraphActivity extends AppCompatActivity {
         mChart.setPinchZoom(true);
         mChart.getXAxis().setDrawAxisLine(false);
         mChart.getXAxis().setDrawGridLines(false);
-        mChart.getAxisLeft().setDrawGridLines(false);
-
+        mChart.getXAxis().setAvoidFirstLastClipping(true);
+        mChart.getXAxis().setTextColor(Color.GREEN);
+        mChart.getAxisLeft().setDrawGridLines(true);
+        mChart.getAxisLeft().setTextColor(Color.GREEN);
         mChart.getAxisLeft().setAxisMinValue(0);
-        mChart.getAxisLeft().setAxisMaxValue(10);
-
+        mChart.getAxisLeft().setAxisMaxValue(100);
 
         //adds all dataSets to mData to be displayed on graph
         mData= new LineData();
@@ -348,6 +333,11 @@ public class GraphActivity extends AppCompatActivity {
             mData.addDataSet(mSet);
         }
         mChart.setData(mData);
+
+        //get legend object and customize
+        Legend legend = mChart.getLegend();
+        legend.setForm(Legend.LegendForm.LINE);
+        legend.setTextColor(Color.BLUE);
 
         mChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
             @Override
