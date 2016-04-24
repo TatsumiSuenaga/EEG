@@ -21,7 +21,6 @@ import com.emotiv.insight.IEdk;
 import com.emotiv.insight.IEdkErrorCode;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Legend;
-import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
@@ -73,7 +72,7 @@ public class GraphActivity extends AppCompatActivity {
 
     String[] Name_Channel = {"AF3","T7","T8","AF4", "F3", "F4", "F7", "F8", "FC5", "FC6", "P7", "P8", "O1", "O2"};
 
-    private final double[][] eegData = new double[14][5];
+    private double[][] eegData = new double[14][5];
     private int[] channelIndex;
     private int number;
 
@@ -99,7 +98,6 @@ public class GraphActivity extends AppCompatActivity {
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
-
                 case 0:
                     int state = IEdk.IEE_EngineGetNextEvent();
                     if (state == IEdkErrorCode.EDK_OK.ToInt()) {
