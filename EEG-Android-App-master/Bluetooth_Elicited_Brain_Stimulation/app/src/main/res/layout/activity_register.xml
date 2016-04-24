@@ -29,7 +29,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dip"
                 android:singleLine="true"
-                android:layout_marginBottom="20dip"/>
+                android:layout_marginBottom="20dip"
+                      android:inputType="textCapWords|textPersonName"/>
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -40,7 +41,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dip"
                 android:singleLine="true"
-                android:layout_marginBottom="20dip"/>
+                android:layout_marginBottom="20dip"
+                      android:inputType="textCapWords|textPersonName"/>
             <!-- Email Label -->
             <TextView
                 android:layout_width="match_parent"
