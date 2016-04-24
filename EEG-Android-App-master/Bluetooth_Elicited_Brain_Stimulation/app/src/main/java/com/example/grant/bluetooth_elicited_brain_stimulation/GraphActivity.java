@@ -48,7 +48,7 @@ public class GraphActivity extends AppCompatActivity {
 
     private boolean[] channelList;
 
-    private ArrayList<LineDataSet> mDataSets;
+    private ArrayList<LineDataSet> mDataSets = new ArrayList<>();
     private LineChart mChart;
     private LineData mData;
 
@@ -73,8 +73,9 @@ public class GraphActivity extends AppCompatActivity {
 
     String[] Name_Channel = {"AF3","T7","T8","AF4", "F3", "F4", "F7", "F8", "FC5", "FC6", "P7", "P8", "O1", "O2"};
 
-    private double[][] eegData;
+    private final double[][] eegData = new double[14][5];
     private int[] channelIndex;
+    private int number;
 
 
     /**private static final String EXTRA_RECORD_READING =
@@ -117,8 +118,6 @@ public class GraphActivity extends AppCompatActivity {
 
                     break;
                 case 1:
-                    /*Connect device with Epoc Plus headset*/
-                    int number = IEdk.IEE_GetEpocPlusDeviceCount();
                     if(number != 0) {
                         if(!lock){
                             lock = true;
@@ -144,22 +143,6 @@ public class GraphActivity extends AppCompatActivity {
 //                            }
 //                        }
 //                    }
-
-
-                    eegData[0] = IEdk.IEE_GetAverageBandPowers(Channel_list[0]);
-                    eegData[1] = IEdk.IEE_GetAverageBandPowers(Channel_list[1]);
-                    eegData[2] = IEdk.IEE_GetAverageBandPowers(Channel_list[2]);
-                    eegData[3] = IEdk.IEE_GetAverageBandPowers(Channel_list[3]);
-                    eegData[4] = IEdk.IEE_GetAverageBandPowers(Channel_list[4]);
-                    eegData[5] = IEdk.IEE_GetAverageBandPowers(Channel_list[5]);
-                    eegData[6] = IEdk.IEE_GetAverageBandPowers(Channel_list[6]);
-                    eegData[7] = IEdk.IEE_GetAverageBandPowers(Channel_list[7]);
-                    eegData[8] = IEdk.IEE_GetAverageBandPowers(Channel_list[8]);
-                    eegData[9] = IEdk.IEE_GetAverageBandPowers(Channel_list[9]);
-                    eegData[10] = IEdk.IEE_GetAverageBandPowers(Channel_list[10]);
-                    eegData[11] = IEdk.IEE_GetAverageBandPowers(Channel_list[11]);
-                    eegData[12] = IEdk.IEE_GetAverageBandPowers(Channel_list[12]);
-                    eegData[13] = IEdk.IEE_GetAverageBandPowers(Channel_list[13]);
 
                     if(eegData != null){
                         addEntry();
@@ -200,23 +183,7 @@ public class GraphActivity extends AppCompatActivity {
         //data.setValueTextColor(Color.WHITE);
 
 
-        //get legend object and customize
-        Legend legend = mChart.getLegend();
-        legend.setForm(Legend.LegendForm.LINE);
-        legend.setTextColor(Color.WHITE);
 
-        XAxis xAxis = mChart.getXAxis();
-        xAxis.setTextColor(Color.WHITE);
-        xAxis.setDrawGridLines(false);
-        xAxis.setAvoidFirstLastClipping(true);
-
-        YAxis yAxis = mChart.getAxisLeft();
-        yAxis.setTextColor(Color.WHITE);
-        yAxis.setAxisMaxValue(100f);
-        yAxis.setDrawGridLines(true);
-
-        YAxis yAxis2 = mChart.getAxisRight();
-        yAxis2.setEnabled(false);
 
         // NEW CODE
 
@@ -249,6 +216,7 @@ public class GraphActivity extends AppCompatActivity {
 //        });
 
         IEdk.IEE_EngineConnect(this, "");
+
 //        Thread processingThread = new Thread()
 //        {
 //            @Override
@@ -279,10 +247,63 @@ public class GraphActivity extends AppCompatActivity {
     //adds all selected channels to the ArrayList of dataSets so they can be displayed
     private void initializeDataChannels() {
         int counter = 0;
+        channelIndex = new int[channelList.length];
         for(int i = 0; i<channelList.length;i++) {
             //if the channel is true, it was selected for data display
             if(channelList[i]) {
                 LineDataSet dataSet = new LineDataSet(null, Name_Channel[i]);
+                dataSet.setLineWidth(2.5f);
+                dataSet.setDrawCircles(false);
+                dataSet.setHighLightColor(Color.rgb(190, 190, 190));
+                //set dataSet color based on channel
+                if(i==0) {
+                    dataSet.setColor(Color.parseColor("#F44336"));
+                }
+                else if(i==1) {
+                    dataSet.setColor(Color.parseColor("#9C27B0"));
+                }
+                else if(i==2) {
+                    dataSet.setColor(Color.parseColor("#2196F3"));
+                }
+                else if(i==3) {
+                    dataSet.setColor(Color.parseColor("#03A9F4"));
+                }
+                else if(i==4) {
+                    dataSet.setColor(Color.parseColor("#009688"));
+                }
+                else if(i==5) {
+                    dataSet.setColor(Color.parseColor("#4CAF50"));
+                }
+                else if(i==6) {
+                    dataSet.setColor(Color.parseColor("#CDDC39"));
+                }
+                else if(i==7) {
+                    dataSet.setColor(Color.parseColor("#FFEB3B"));
+                }
+                else if(i==8) {
+                    dataSet.setColor(Color.parseColor("#FF9800"));
+                }
+                else if(i==9) {
+                    dataSet.setColor(Color.parseColor("#FF5722"));
+                }
+                else if(i==10) {
+                    dataSet.setColor(Color.parseColor("#607D8B"));
+                }
+                else if(i==11) {
+                    dataSet.setColor(Color.parseColor("#795548"));
+                }
+                else if(i==12) {
+                    dataSet.setColor(Color.parseColor("#69F0AE"));
+                }
+                else if(i==13) {
+                    dataSet.setColor(Color.parseColor("#E91E63"));
+                }
+
+
+
+                dataSet.setAxisDependency(YAxis.AxisDependency.LEFT);
+                dataSet.setValueTextSize(10f);
+
                 mDataSets.add(dataSet);
                 channelIndex[counter] = i;
                 counter++;
@@ -291,26 +312,32 @@ public class GraphActivity extends AppCompatActivity {
     }
 
     private void configureChart() {
-        mChart.setDescription("");
+        mChart.setDescription("fuck the police");
         mChart.setDrawGridBackground(false);
-        mChart.setData(new LineData());
         mChart.getAxisRight().setEnabled(false);
         mChart.setTouchEnabled(true);
         mChart.setScaleEnabled(false);
         mChart.setPinchZoom(true);
         mChart.getXAxis().setDrawAxisLine(false);
         mChart.getXAxis().setDrawGridLines(false);
-        mChart.getAxisLeft().setDrawGridLines(false);
-
+        mChart.getXAxis().setAvoidFirstLastClipping(true);
+        mChart.getXAxis().setTextColor(Color.GREEN);
+        mChart.getAxisLeft().setDrawGridLines(true);
+        mChart.getAxisLeft().setTextColor(Color.GREEN);
         mChart.getAxisLeft().setAxisMinValue(0);
-        mChart.getAxisLeft().setAxisMaxValue(10);
-
+        mChart.getAxisLeft().setAxisMaxValue(20);
 
         //adds all dataSets to mData to be displayed on graph
         mData= new LineData();
         for(LineDataSet mSet : mDataSets) {
             mData.addDataSet(mSet);
         }
+        mChart.setData(mData);
+
+        //get legend object and customize
+        Legend legend = mChart.getLegend();
+        legend.setForm(Legend.LegendForm.LINE);
+        legend.setTextColor(Color.BLUE);
 
         mChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
             @Override
@@ -326,19 +353,33 @@ public class GraphActivity extends AppCompatActivity {
 
     }
     private void addEntry() {
-        LineData data = mChart.getData();
+        eegData[0] = IEdk.IEE_GetAverageBandPowers(Channel_list[0]);
+        eegData[1] = IEdk.IEE_GetAverageBandPowers(Channel_list[1]);
+        eegData[2] = IEdk.IEE_GetAverageBandPowers(Channel_list[2]);
+        eegData[3] = IEdk.IEE_GetAverageBandPowers(Channel_list[3]);
+        eegData[4] = IEdk.IEE_GetAverageBandPowers(Channel_list[4]);
+        eegData[5] = IEdk.IEE_GetAverageBandPowers(Channel_list[5]);
+        eegData[6] = IEdk.IEE_GetAverageBandPowers(Channel_list[6]);
+        eegData[7] = IEdk.IEE_GetAverageBandPowers(Channel_list[7]);
+        eegData[8] = IEdk.IEE_GetAverageBandPowers(Channel_list[8]);
+        eegData[9] = IEdk.IEE_GetAverageBandPowers(Channel_list[9]);
+        eegData[10] = IEdk.IEE_GetAverageBandPowers(Channel_list[10]);
+        eegData[11] = IEdk.IEE_GetAverageBandPowers(Channel_list[11]);
+        eegData[12] = IEdk.IEE_GetAverageBandPowers(Channel_list[12]);
+        eegData[13] = IEdk.IEE_GetAverageBandPowers(Channel_list[13]);
+
         int index = 0;
-        for(LineDataSet dataSet : mDataSets) {
+        for(int i = 0; i < mData.getDataSetCount(); i++) {
             mData.addXValue("");
             mData.addEntry(
-                    new Entry((float)eegData[channelIndex[index]][0], dataSet.getEntryCount()),0);
+                    new Entry((float)eegData[channelIndex[index]][0], mData.getDataSetByIndex(i).getEntryCount()),0);
             index++;
             //notify chart data have changed
             mChart.notifyDataSetChanged();
             //limit number of visible entries
             mChart.setVisibleXRange(10, 10);
             //scroll to last entry
-            mChart.moveViewToX(data.getXValCount());
+            mChart.moveViewToX(mData.getXValCount());
             mChart.getRootView().invalidate();
             mChart.invalidate();
         }
@@ -356,6 +397,8 @@ public class GraphActivity extends AppCompatActivity {
                 {
                     try
                     {
+                        /*Connect device with Epoc Plus headset*/
+                        number = IEdk.IEE_GetEpocPlusDeviceCount();
                         handler.sendEmptyMessage(0);
                         handler.sendEmptyMessage(1);
 //                        if(isEnableGetData && isEnableWriteFile)handler.sendEmptyMessage(2);
