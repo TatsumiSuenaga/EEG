@@ -1,7 +1,9 @@
 package com.example.grant.bluetooth_elicited_brain_stimulation;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -40,17 +42,28 @@ public class RegisterActivity extends AppCompatActivity{
 
         clinicianDAO = new ClinicianDAO(getApplicationContext());
 
-        loginScreen.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View arg0) {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
 
-                finish();
-            }
-        });
+        boolean accept = false;
 
-        create.setOnClickListener(
-                new View.OnClickListener()
-                {
-                    public void onClick(View view){
+        // set title
+        alertDialogBuilder.setTitle("LEGAL STUFF");
+
+        // set dialog message
+        alertDialogBuilder
+                .setMessage("Do you accept the terms of this app?")
+                .setCancelable(false)
+                .setNegativeButton("I do not accept.", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent i = new Intent(RegisterActivity.this, LoginActivity.class);
+                        startActivity(i);
+                        Toast toast = Toast.makeText(getApplicationContext(), "Account not registered", Toast.LENGTH_SHORT);
+                        toast.show();
+                    }
+                })
+                .setPositiveButton("I accept.",new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog,int id) {
 
                         String first = mFirst.getText().toString();
                         String last = mLast.getText().toString();
@@ -71,6 +84,28 @@ public class RegisterActivity extends AppCompatActivity{
                             startActivity(i);
                             finish();
                         }
+                    }
+                });
+
+        // create alert dialog
+        final AlertDialog alertDialog = alertDialogBuilder.create();
+
+
+
+        loginScreen.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View arg0) {
+
+                finish();
+            }
+        });
+
+        create.setOnClickListener(
+                new View.OnClickListener()
+                {
+                    public void onClick(View view){
+
+                        // show it
+                        alertDialog.show();
 
                     }
                 }
