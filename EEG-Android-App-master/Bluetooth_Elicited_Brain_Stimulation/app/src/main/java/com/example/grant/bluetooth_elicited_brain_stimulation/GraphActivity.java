@@ -283,6 +283,58 @@ public class GraphActivity extends AppCompatActivity {
             //if the channel is true, it was selected for data display
             if(channelList[i]) {
                 LineDataSet dataSet = new LineDataSet(null, Name_Channel[i]);
+                dataSet.setLineWidth(2.5f);
+                dataSet.setDrawCircles(false);
+                dataSet.setHighLightColor(Color.rgb(190, 190, 190));
+                //set dataSet color based on channel
+                if(i==0) {
+                    dataSet.setColor(Color.parseColor("#F44336"));
+                }
+                else if(i==1) {
+                    dataSet.setColor(Color.parseColor("#9C27B0"));
+                }
+                else if(i==2) {
+                    dataSet.setColor(Color.parseColor("#2196F3"));
+                }
+                else if(i==3) {
+                    dataSet.setColor(Color.parseColor("#03A9F4"));
+                }
+                else if(i==4) {
+                    dataSet.setColor(Color.parseColor("#009688"));
+                }
+                else if(i==5) {
+                    dataSet.setColor(Color.parseColor("#4CAF50"));
+                }
+                else if(i==6) {
+                    dataSet.setColor(Color.parseColor("#CDDC39"));
+                }
+                else if(i==7) {
+                    dataSet.setColor(Color.parseColor("#FFEB3B"));
+                }
+                else if(i==8) {
+                    dataSet.setColor(Color.parseColor("#FF9800"));
+                }
+                else if(i==9) {
+                    dataSet.setColor(Color.parseColor("#FF5722"));
+                }
+                else if(i==10) {
+                    dataSet.setColor(Color.parseColor("#607D8B"));
+                }
+                else if(i==11) {
+                    dataSet.setColor(Color.parseColor("#795548"));
+                }
+                else if(i==12) {
+                    dataSet.setColor(Color.parseColor("#69F0AE"));
+                }
+                else if(i==13) {
+                    dataSet.setColor(Color.parseColor("#E91E63"));
+                }
+
+
+
+                dataSet.setAxisDependency(YAxis.AxisDependency.LEFT);
+                dataSet.setValueTextSize(10f);
+
                 mDataSets.add(dataSet);
                 channelIndex[counter] = i;
                 counter++;
