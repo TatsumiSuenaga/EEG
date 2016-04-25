@@ -91,11 +91,13 @@
         </activity>
         <activity
             android:name=".LoginActivity"
-            android:label="Log In to your Account">
+            android:label="Log In to your Account"
+            android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
             android:name=".RegisterActivity"
-            android:label="Register New Account">
+            android:label="Register New Account"
+            android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
             android:name=".PatientRegisterActivity"

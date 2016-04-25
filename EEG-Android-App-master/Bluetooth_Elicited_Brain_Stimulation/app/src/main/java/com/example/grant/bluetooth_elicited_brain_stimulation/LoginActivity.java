@@ -1,6 +1,6 @@
 package com.example.grant.bluetooth_elicited_brain_stimulation;
 
-
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -10,6 +10,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import butterknife.ButterKnife;
+import butterknife.Bind;
 
 /**
  * Created by Chris on 4/12/2016.

@@ -30,4 +30,5 @@ dependencies {
     compile 'com.android.support:cardview-v7:23.1.1'
     compile files('src/main/libs/bedk.jar')
     compile files('src/main/libs/achartengine-1.1.0.jar')
+    compile 'com.jakewharton:butterknife:7.0.1'
 }

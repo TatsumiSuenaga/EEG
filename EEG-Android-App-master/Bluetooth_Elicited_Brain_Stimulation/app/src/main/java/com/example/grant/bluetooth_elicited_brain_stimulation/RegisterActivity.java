@@ -11,6 +11,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import butterknife.ButterKnife;
+
 /**
  * Created by Chris on 4/12/2016.
  */
