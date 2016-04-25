@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorDarkGreen">#599B4E</color>
-    <color name="colorLightGreen">#71BF66</color><!--or #4CAF50-->
+    <color name="colorLightGreen">#00C853</color><!--or #71BF66-->
     <color name="colorDarkGray">#463F3F</color>
     <color name="colorLightGray">#9B9797</color>
     <color name="colorDarkRed">#C45757</color>

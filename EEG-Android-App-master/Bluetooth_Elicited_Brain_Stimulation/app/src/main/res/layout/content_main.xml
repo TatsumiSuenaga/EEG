@@ -119,12 +119,12 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/tuts_logo2" />
+                android:src="@drawable/clinician_icon" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/tutorial_button"
+                android:text="@string/clinician_button"
                 style="@style/text"/>
         </LinearLayout>
     </LinearLayout>
