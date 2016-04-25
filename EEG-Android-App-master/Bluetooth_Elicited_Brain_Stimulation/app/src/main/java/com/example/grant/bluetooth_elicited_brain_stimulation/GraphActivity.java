@@ -18,7 +18,7 @@ import android.view.View;
 import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.RelativeLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.emotiv.insight.IEdk;
@@ -50,7 +50,7 @@ import java.util.ArrayList;
  */
 public class GraphActivity extends AppCompatActivity {
 
-    private RelativeLayout mainLayout;
+    private LinearLayout mainLayout;
 
     private boolean[] channelList;
 
@@ -156,6 +156,7 @@ public class GraphActivity extends AppCompatActivity {
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
+
                 case 0:
                     int state = IEdk.IEE_EngineGetNextEvent();
                     if (state == IEdkErrorCode.EDK_OK.ToInt()) {
@@ -218,7 +219,7 @@ public class GraphActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        mainLayout = (RelativeLayout) findViewById(R.id.graphLayout);
+        mainLayout = (LinearLayout) findViewById(R.id.graphLayout);
 
         //create line chart
         mChart = new LineChart(this);
@@ -373,7 +374,7 @@ public class GraphActivity extends AppCompatActivity {
     }
 
     private void configureChart() {
-        mChart.setDescription("fuck the police");
+        mChart.setDescription("");
         mChart.setDrawGridBackground(false);
         mChart.getAxisRight().setEnabled(false);
         mChart.setTouchEnabled(true);

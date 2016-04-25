@@ -12,7 +12,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import java.io.BufferedWriter;
 
@@ -77,18 +76,18 @@ public class NewRecordingActivity extends AppCompatActivity {
         mChannelList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String ch = (String) mChannelList.getItemAtPosition(position);
-                Toast.makeText(getApplicationContext(),
-                        ch + " is turned on", Toast.LENGTH_SHORT).show();
+//                String ch = (String) mChannelList.getItemAtPosition(position);
+//                Toast.makeText(getApplicationContext(),
+//                        ch + " is turned on", Toast.LENGTH_SHORT).show();
                 if(channelList[position])
                 {
                     channelList[position] = false;
-                    view.setBackgroundColor(Color.WHITE);
+                    mChannelList.getChildAt(position).setBackgroundColor(Color.WHITE);
                 }
                 else
                 {
                     channelList[position] = true;
-                    view.setBackgroundColor(Color.parseColor("#66ff33"));
+                    mChannelList.getChildAt(position).setBackgroundColor(Color.parseColor("#DEDEDE"));
                 }
             }
         });
