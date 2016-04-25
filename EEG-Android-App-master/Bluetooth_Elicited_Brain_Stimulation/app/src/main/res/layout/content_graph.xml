@@ -22,7 +22,7 @@
         android:contentDescription="@string/start_recording_accessibility"
         android:background="@null"
         android:layout_above="@+id/new_recording_status_text"
-        android:layout_centerHorizontal="true"/>
+        android:layout_centerHorizontal="true" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -30,9 +30,9 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="@string/new_recording_status_text_string"
         android:id="@+id/new_recording_status_text"
-        android:layout_below="@+id/start_recording_button"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="53dp"/>
+        android:layout_marginBottom="48dp" />
 
 
 </RelativeLayout>
