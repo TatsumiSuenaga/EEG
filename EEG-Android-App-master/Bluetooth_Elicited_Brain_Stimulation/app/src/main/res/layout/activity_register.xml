@@ -2,11 +2,10 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true">
+            android:fitsSystemWindows="true">
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#fff">
+        android:layout_height="wrap_content">
 
         <!-- Header -->
         <!-- Footer -->
@@ -17,12 +16,13 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="10dip">
+            android:paddingTop="56dp"
+            android:paddingLeft="24dp"
+            android:paddingRight="24dp">
             <!-- Full Name Label -->
             <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="#372c24"
             android:text="First Name"/>
             <EditText android:id="@+id/reg_firstname"
                 android:layout_width="match_parent"
@@ -34,7 +34,6 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="#372c24"
                 android:text="Last Name"/>
             <EditText android:id="@+id/reg_lastname"
                 android:layout_width="match_parent"
@@ -47,7 +46,6 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="#372c24"
                 android:text="Email"/>
             <EditText android:id="@+id/reg_email"
                 android:layout_width="match_parent"
@@ -60,7 +58,6 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="#372c24"
                 android:text="Password"/>
             <EditText android:id="@+id/reg_password"
                 android:layout_width="match_parent"
@@ -81,8 +78,7 @@
                 android:layout_marginBottom="40dip"
                 android:text="Login Here if Account Already Exists"
                 android:layout_gravity="center"
-                android:textSize="20dip"
-                android:textColor="#025f7c"/>
+                android:textSize="20sp"/>
 
         </LinearLayout>
         <!-- Registration Form Ends -->
