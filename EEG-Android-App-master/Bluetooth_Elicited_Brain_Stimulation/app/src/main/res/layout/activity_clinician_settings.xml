@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="10dp"
+    android:orientation="vertical"
+    >
+    <TableRow>
+        <EditText android:id="@+id/clinician_settings_fName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+    </TableRow>
+    <TableRow>
+        <EditText android:id="@+id/clinician_settings_lName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+    </TableRow>
+    <TableRow>
+        <EditText android:id="@+id/clinician_settings_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textEmailAddress"
+            />
+    </TableRow>
+    <TableRow>
+        <EditText android:id="@+id/clinician_settings_passwords"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            />
+    </TableRow>
+    <TableRow>
+        <Button
+            android:id="@+id/save_clinician_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Save Clinician"
+            />
+    </TableRow>
+    <TableRow>
+        <Button
+            android:id="@+id/delete_clinician_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Delete"
+            />
+    </TableRow>
+</TableLayout>

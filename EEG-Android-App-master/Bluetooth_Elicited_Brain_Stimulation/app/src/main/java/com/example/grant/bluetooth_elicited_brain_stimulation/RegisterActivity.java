@@ -72,19 +72,25 @@ public class RegisterActivity extends AppCompatActivity{
                         String email = mEmail.getText().toString();
                         String password = mPassword.getText().toString();
 
+                        boolean validated = Validate(password, email);
+
                         Clinician clinician = new Clinician(first, last, email, password);
                         clinician.setID(clinicianDAO.maxID() + 1);
 
-                        if(clinicianDAO.createClinician(clinician) == -1){
+                        if(!validated){
                             Toast toast = Toast.makeText(getApplicationContext(), "Registration failed", Toast.LENGTH_SHORT);
                             toast.show();
                         }
-                        else{
+                        else if (clinicianDAO.createClinician(clinician) != -1){
                             Toast toast = Toast.makeText(getApplicationContext(), "Account registered", Toast.LENGTH_SHORT);
                             toast.show();
                             Intent i = new Intent(RegisterActivity.this, LoginActivity.class);
                             startActivity(i);
                             finish();
+                        }
+                        else{
+                            Toast toast = Toast.makeText(getApplicationContext(), "Registration failed", Toast.LENGTH_SHORT);
+                            toast.show();
                         }
                     }
                 });
@@ -112,5 +118,22 @@ public class RegisterActivity extends AppCompatActivity{
                     }
                 }
         );
+    }
+
+    private boolean Validate(String password, String email){
+        boolean isValid = true;
+
+        ClinicianDAO clinicianDAO = new ClinicianDAO(getApplicationContext());
+
+        Clinician test = clinicianDAO.getClinician(email);
+
+        if(password.length() < 4 || password.isEmpty()){
+            isValid = false;
+        }
+        if(!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches() || email.isEmpty() || test.getID() != -1){
+            isValid = false;
+        }
+
+        return isValid;
     }
 }

@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
         tutorialButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v){
-                Intent i = new Intent(MainActivity.this, TutorialActivity.class);
+                Intent i = new Intent(MainActivity.this, ClinicianSettingsActivity.class);
                 startActivity(i);
             }
         });
