@@ -21,15 +21,21 @@ public class LoginActivity extends AppCompatActivity {
 
     private final String PREFS_NAME = "MyPrefsFile";
     private final static String OPT_EMAIL="email";
-    EditText mEmail;
-    EditText mPassword;
-    Button mLogin;
+//    EditText mEmail;
+//    EditText mPassword;
+//    Button mLogin;
     ClinicianDAO clinicianDAO;
+
+    @Bind(R.id.log_email) EditText mEmail;
+    @Bind(R.id.log_password) EditText mPassword;
+    @Bind(R.id.btnLogin) Button mLogin;
+    @Bind(R.id.link_to_register) TextView registerScreen;
 
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        ButterKnife.bind(this);
 
         DatabaseHelper db = new DatabaseHelper(this);
         db.getWritableDatabase();
@@ -44,13 +50,13 @@ public class LoginActivity extends AppCompatActivity {
             finish();
         }
 
-        TextView registerScreen = (TextView) findViewById(R.id.link_to_register);
-
-        mEmail = (EditText) findViewById(R.id.log_email);
-
-        mPassword = (EditText) findViewById(R.id.log_password);
-
-        mLogin = (Button) findViewById(R.id.btnLogin);
+//        TextView registerScreen = (TextView) findViewById(R.id.link_to_register);
+//
+//        mEmail = (EditText) findViewById(R.id.log_email);
+//
+//        mPassword = (EditText) findViewById(R.id.log_password);
+//
+//        mLogin = (Button) findViewById(R.id.btnLogin);
 
         registerScreen.setOnClickListener(new View.OnClickListener() {
 
@@ -103,5 +109,10 @@ public class LoginActivity extends AppCompatActivity {
                 }
         );
 
+    }
+    @Override
+    public void onBackPressed() {
+        // Disable going back to the MainActivity
+        moveTaskToBack(true);
     }
 }

@@ -92,7 +92,7 @@
         <activity
             android:name=".LoginActivity"
             android:label="Log In to your Account"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.Login">
         </activity>
         <activity
             android:name=".RegisterActivity"
