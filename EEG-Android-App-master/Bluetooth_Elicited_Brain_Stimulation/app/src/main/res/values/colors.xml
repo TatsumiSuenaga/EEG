@@ -21,6 +21,6 @@
     <color name="primary_dark">#4CAF50</color>
     <color name="primary_darker">#388E3C</color>
     <color name="accent">#FFF</color>
-    <color name="iron">#CCCCCC</color>
+    <color name="iron">#F7F7FF</color>
 
 </resources>

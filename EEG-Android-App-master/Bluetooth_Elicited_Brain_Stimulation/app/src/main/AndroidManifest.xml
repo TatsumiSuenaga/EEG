@@ -97,7 +97,7 @@
         <activity
             android:name=".RegisterActivity"
             android:label="Register New Account"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.Login">
         </activity>
         <activity
             android:name=".PatientRegisterActivity"
