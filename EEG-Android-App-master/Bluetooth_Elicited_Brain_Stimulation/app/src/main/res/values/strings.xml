@@ -19,4 +19,6 @@
     <string name="title_activity_profile">Patient Info</string>
     <string name="title_activity_tutorial">TutorialActivity</string>
     <string name="tutorial_text">This is where the tutorial would go</string>
+    <string name="start_recording_accessibility">Start recording</string>
+    <string name="new_recording_status_text_string">Start recording</string>
 </resources>
