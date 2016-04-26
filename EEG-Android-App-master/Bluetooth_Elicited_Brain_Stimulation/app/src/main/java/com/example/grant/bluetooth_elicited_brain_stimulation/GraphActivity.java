@@ -295,6 +295,7 @@ public class GraphActivity extends AppCompatActivity {
             mData.addXValue("");
             mData.addEntry(new Entry((float) eegData[channelIndex[index]][0], mData.getDataSetByIndex(i).getEntryCount()), 0);
             index++;
+
         }
         //notify chart data have changed
         mChart.notifyDataSetChanged();
@@ -328,22 +329,24 @@ public class GraphActivity extends AppCompatActivity {
         // Get readings for chosen channels
         for(int x = 0; x < channelIndex.length; x++)
         {
-            eegData[x][0] = (Math.random() * 8);
+            eegData[x][0] = (Math.random() * 4 + x*3);
         }
 
         for (int i = 0; i < mData.getDataSetCount(); i++) {
             mData.addXValue("");
-            mData.addEntry(new Entry((float) eegData[channelIndex[index]][0], mData.getDataSetByIndex(i).getEntryCount()), 0);
+            mData.addEntry(new Entry((float) eegData[channelIndex[index]][0], mData.getDataSetByIndex(i).getEntryCount()), i);
             index++;
+            Log.e("stuff","mDataByIndex = "+mData.getDataSetByIndex(i)+" mDatasets = "+mDataSets +" eegData = "+eegData[channelIndex[index]][0]);
+            //notify chart data have changed
+            mChart.notifyDataSetChanged();
+            //limit number of visible entries
+            mChart.setVisibleXRange(10, 10);
+            //scroll to last entry
+            mChart.moveViewToX(mData.getXValCount()/mData.getDataSetCount() - 5);
+            mChart.getRootView().invalidate();
+            mChart.invalidate();
         }
-        //notify chart data have changed
-        mChart.notifyDataSetChanged();
-        //limit number of visible entries
-        mChart.setVisibleXRange(10, 10);
-        //scroll to last entry
-        mChart.moveViewToX(mData.getXValCount()-5);
-        mChart.getRootView().invalidate();
-        mChart.invalidate();
+
 
         if(isEnableWriteFile && mIsRecording)
         {
@@ -385,7 +388,7 @@ public class GraphActivity extends AppCompatActivity {
                     });
 
                     try {
-                        Thread.sleep(200);
+                        Thread.sleep(150);
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
