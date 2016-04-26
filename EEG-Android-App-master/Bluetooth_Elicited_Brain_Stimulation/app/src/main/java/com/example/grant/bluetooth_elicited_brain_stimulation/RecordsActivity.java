@@ -25,19 +25,13 @@ public class RecordsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_records);
 
-//        mToolbar = (Toolbar) findViewById(R.id.toolbar);
-//        if (mToolbar != null) {
-//            mToolbar.setTitle("Records");
-//            setSupportActionBar(mToolbar);
-//        }
-
-        ListView recordingsLV = (ListView)findViewById(R.id.listViewRecords);
+        ListView recordingsLV = (ListView) findViewById(R.id.listViewRecords);
 
         RecordingDAO recordingDAO = new RecordingDAO(this);
 
         recordingsList = recordingDAO.getRecordings();
 
-        ArrayAdapter<Recording> recordingAdapter = new ArrayAdapter<Recording>(RecordsActivity.this,android.R.layout.simple_list_item_1, recordingsList);
+        ArrayAdapter<Recording> recordingAdapter = new ArrayAdapter<Recording>(RecordsActivity.this, android.R.layout.simple_list_item_1, recordingsList);
         recordingsLV.setAdapter(recordingAdapter);
 
         recordingsLV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -52,26 +46,4 @@ public class RecordsActivity extends AppCompatActivity {
 
 
     }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.logout:
-                SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-                settings.edit().putBoolean("first_time_login", true).apply();
-                startActivity(new Intent(this,LoginActivity.class));
-                finish();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
 }
