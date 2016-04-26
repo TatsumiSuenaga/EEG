@@ -48,7 +48,7 @@ public class ProfileActivityFragment extends Fragment {
         super.onCreate(savedInstanceState);
         Context context = getContext();
         SharedPreferences settings = context.getSharedPreferences(PREFS_NAME, 0);
-        clinicianEmail = settings.getString(PREFS_NAME, DEF_VALUE);
+        clinicianEmail = settings.getString(OPT_EMAIL, DEF_VALUE);
         ClinicianDAO clinicianDAO = new ClinicianDAO(context);
         Clinician user = clinicianDAO.getClinician(clinicianEmail);
         clinicianId = user.getID();
