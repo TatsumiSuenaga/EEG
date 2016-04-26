@@ -13,14 +13,13 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import java.util.Arrays;
-
 public class NewRecordingActivity extends AppCompatActivity {
 
     private static final String TAG = NewRecordingActivity.class.getSimpleName();
     private ListView mChannelList, mSampleDataList;
     boolean[] channelList = new boolean[14];
     boolean[] sampleDataButton = new boolean[1];
+    boolean sampleData = true;
     Button mButton;
 
     @Override
@@ -30,8 +29,6 @@ public class NewRecordingActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         //list view will go here
-        Arrays.fill(channelList, Boolean.FALSE); //added
-        sampleDataButton[0] = true; //added
 
         mButton = (Button) findViewById(R.id.tempButt);
         mButton.setOnClickListener(new View.OnClickListener(){
@@ -42,7 +39,7 @@ public class NewRecordingActivity extends AppCompatActivity {
                 {
                     Intent i = new Intent(NewRecordingActivity.this, GraphActivity.class);
                     i.putExtra("channelList", channelList);
-                    i.putExtra("sampleDataButton",sampleDataButton);
+                    i.putExtra("sampleData",sampleData);
                     startActivity(i);
                 }
                 else {
@@ -56,8 +53,8 @@ public class NewRecordingActivity extends AppCompatActivity {
                 "FC5", "T7", "P7", "O1", "O2", "P8",
                 "T8", "FC6", "F4", "F8", "AF4"};
 
-//        mSampleDataList = (ListView) findViewById(R.id.sampleDataList);
-//        String[] sampleDataToggle = new String[]{("Use Sample Data?")};
+        //mSampleDataList = (ListView) findViewById(R.id.sampleDataList);
+    //    String[] sampleDataToggle = new String[]{("Use Sample Data?")};
 
         /**First Param: Context
          * Second Param: Layout for the Row
@@ -68,7 +65,7 @@ public class NewRecordingActivity extends AppCompatActivity {
                 android.R.layout.simple_list_item_1, android.R.id.text1, channels );
 
 //        ArrayAdapter<String> adapter2 = new ArrayAdapter<>(NewRecordingActivity.this,
-//                android.R.layout.simple_list_item_2,android.R.id.text1, sampleDataToggle);
+//                android.R.layout.simple_list_item_1,android.R.id.text1, sampleDataToggle);
 
         //Temporary adapter just for UI, this will be later made into different fragment probably
         mChannelList.setAdapter(adapter);
@@ -78,13 +75,12 @@ public class NewRecordingActivity extends AppCompatActivity {
                 String ch = (String) mChannelList.getItemAtPosition(position);
                 Toast.makeText(getApplicationContext(),
                         ch + " is turned on", Toast.LENGTH_SHORT).show();
-                if (channelList[position] == false) {
-                    channelList[position] = true;
-                    mChannelList.getChildAt(position).setBackgroundColor(Color.parseColor("#DEDEDE"));
-
-                } else if (channelList[position] == true){
+                if (channelList[position]) {
                     channelList[position] = false;
                     mChannelList.getChildAt(position).setBackgroundColor(Color.WHITE);
+                } else {
+                    channelList[position] = true;
+                    mChannelList.getChildAt(position).setBackgroundColor(Color.parseColor("#DEDEDE"));
                 }
             }
         });

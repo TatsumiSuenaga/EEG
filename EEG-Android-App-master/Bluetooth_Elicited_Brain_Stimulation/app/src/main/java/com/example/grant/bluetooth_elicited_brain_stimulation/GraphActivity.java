@@ -140,8 +140,8 @@ public class GraphActivity extends AppCompatActivity {
         channelList = i.getBooleanArrayExtra("channelList");
 
         //check if using sample data was selected
-        mUseSampleData = i.getBooleanArrayExtra("sampleDataButton")[0];
-
+       // i.getBooleanExtra("sampleData",mUseSampleData);
+        mUseSampleData = true;
         setContentView(R.layout.activity_graph);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -183,6 +183,7 @@ public class GraphActivity extends AppCompatActivity {
                     }
                 }
                 mIsRecording = !mIsRecording;
+                Log.e("mIsRecording", "misrecording = "+mIsRecording);
             }
         });
 
@@ -247,22 +248,28 @@ public class GraphActivity extends AppCompatActivity {
         mChart.getXAxis().setDrawGridLines(false);
         mChart.getXAxis().setAvoidFirstLastClipping(true);
         mChart.getXAxis().setTextColor(Color.GREEN);
-        mChart.getAxisLeft().setDrawGridLines(true);
+       // mChart.getAxisLeft().setDrawGridLines(true);
         mChart.getAxisLeft().setTextColor(Color.GREEN);
         mChart.getAxisLeft().setAxisMinValue(0);
         mChart.getAxisLeft().setAxisMaxValue(20);
 
+
         //adds all dataSets to mData to be displayed on graph
         mData = new LineData();
         for (LineDataSet mSet : mDataSets) {
+            Log.e("stuff","mset = "+mSet+" mDatasets = "+mDataSets);
             mData.addDataSet(mSet);
         }
         mChart.setData(mData);
 
         //get legend object and customize
         Legend legend = mChart.getLegend();
+        legend.setFormSize(10f);
         legend.setForm(Legend.LegendForm.LINE);
+        legend.setPosition(Legend.LegendPosition.BELOW_CHART_CENTER);
+
         legend.setTextColor(Color.BLUE);
+        legend.setEnabled(true);
 
         mChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
             @Override
@@ -289,15 +296,16 @@ public class GraphActivity extends AppCompatActivity {
             mData.addXValue("");
             mData.addEntry(new Entry((float) eegData[channelIndex[index]][0], mData.getDataSetByIndex(i).getEntryCount()), 0);
             index++;
-            //notify chart data have changed
-            mChart.notifyDataSetChanged();
-            //limit number of visible entries
-            mChart.setVisibleXRange(10, 10);
-            //scroll to last entry
-            mChart.moveViewToX(mData.getXValCount());
-          //  mChart.getRootView().invalidate();
-            mChart.invalidate();
+
         }
+        //notify chart data have changed
+        mChart.notifyDataSetChanged();
+        //limit number of visible entries
+        mChart.setVisibleXRange(10, 10);
+        //scroll to last entry
+        mChart.moveViewToX(mData.getXValCount());
+        mChart.getRootView().invalidate();
+        mChart.invalidate();
 
         if(isEnableWriteFile && mIsRecording)
         {
@@ -322,22 +330,24 @@ public class GraphActivity extends AppCompatActivity {
         // Get readings for chosen channels
         for(int x = 0; x < channelIndex.length; x++)
         {
-            eegData[x][0] = (Math.random() * 8);
+            eegData[x][0] = (Math.random() * 2 + x*3);
         }
 
         for (int i = 0; i < mData.getDataSetCount(); i++) {
             mData.addXValue("");
-            mData.addEntry(new Entry((float) eegData[channelIndex[index]][0], mData.getDataSetByIndex(i).getEntryCount()), 0);
+            mData.addEntry(new Entry((float) eegData[channelIndex[index]][0], mData.getDataSetByIndex(i).getEntryCount()), i);
             index++;
+            Log.e("stuff","mDataByIndex = "+mData.getDataSetByIndex(i)+" mDatasets = "+mDataSets +" eegData = "+eegData[channelIndex[index]][0]);
+            //notify chart data have changed
+            mChart.notifyDataSetChanged();
+            //limit number of visible entries
+            mChart.setVisibleXRange(10, 10);
+            //scroll to last entry
+            mChart.moveViewToX(mData.getXValCount()/mData.getDataSetCount() - 10);
+            mChart.getRootView().invalidate();
+            mChart.invalidate();
         }
-        //notify chart data have changed
-        mChart.notifyDataSetChanged();
-        //limit number of visible entries
-        mChart.setVisibleXRange(10, 10);
-        //scroll to last entry
-        mChart.moveViewToX(mData.getXValCount());
-//        mChart.getRootView().invalidate();
-        mChart.invalidate();
+
 
         if(isEnableWriteFile && mIsRecording)
         {
@@ -359,7 +369,6 @@ public class GraphActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -367,19 +376,20 @@ public class GraphActivity extends AppCompatActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            if(!mUseSampleData) {
+                            if (!mUseSampleData) {
                                 handler.sendEmptyMessage(0);
                                 handler.sendEmptyMessage(1);
-                                if (isEnableGetData && eegData != null) handler.sendEmptyMessage(2);
-                            }
-                            else {
-                                addSampleEntry();
+                                if (isEnableGetData && eegData != null)
+                                    handler.sendEmptyMessage(2);
+                            } else {
+                                if(mIsRecording)
+                                    addSampleEntry();
                             }
                         }
                     });
 
                     try {
-                        Thread.sleep(200);
+                        Thread.sleep(150);
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
