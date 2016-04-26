@@ -24,4 +24,13 @@
 
     <include layout="@layout/content_graph"/>
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/start_recording_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:layout_margin="16dp"
+        app:backgroundTint="@color/white"
+        android:src="@mipmap/start_recording_button" />
+
 </android.support.design.widget.CoordinatorLayout>

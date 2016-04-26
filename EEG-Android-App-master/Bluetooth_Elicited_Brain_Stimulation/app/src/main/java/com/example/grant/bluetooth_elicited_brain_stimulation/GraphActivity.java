@@ -6,7 +6,6 @@ import android.bluetooth.BluetoothManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -15,11 +14,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
-import android.widget.AbsListView;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.widget.Toast;
 
 import com.emotiv.insight.IEdk;
 import com.emotiv.insight.IEdkErrorCode;
@@ -31,26 +28,19 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
-import com.github.mikephil.charting.utils.ColorTemplate;
-import com.google.android.gms.appindexing.Action;
-import com.google.android.gms.appindexing.AppIndex;
-import com.google.android.gms.common.api.GoogleApiClient;
 
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 /**
  * Created by alex m on 3/9/16
- * <p/>
+ *
  * Views: content_graph.xml and activity_graph.xml
  */
 public class GraphActivity extends AppCompatActivity {
-
-    private LinearLayout mainLayout;
 
     private boolean[] channelList;
 
@@ -58,21 +48,24 @@ public class GraphActivity extends AppCompatActivity {
     private LineChart mChart;
     private LineData mData;
     private ImageButton mPlayStopButton;
-    private TextView mStatusText;
-    private boolean mIsPaused = true;
+    private boolean mIsRecording = false;
 
-
-    private final MyHandler handler = new MyHandler(this);
-    private static final String TAG = NewRecordingActivity.class.getSimpleName();
-    private Button mButton;
-    BluetoothAdapter mBluetoothAdapter;
+    private final EEGDataHandler handler = new EEGDataHandler();
     private static final int REQUEST_ENABLE_BT = 1;
-    private boolean lock = false;
-    private boolean isEnablGetData = false;
+    private boolean isEnableGetData = false;
     private boolean isEnableWriteFile = false;
-    int userId;
     private BufferedWriter motion_writer;
 
+    private double[][] eegData = new double[14][5];
+    private int[] channelIndex;
+    int number;
+
+    private int[] channelColors = new int[] {Color.parseColor("#F44336"),Color.parseColor("#9C27B0"),
+            Color.parseColor("#2196F3"), Color.parseColor("#03A9F4"), Color.parseColor("#009688"),
+            Color.parseColor("#4CAF50"), Color.parseColor("#CDDC39"), Color.parseColor("#FFEB3B"),
+            Color.parseColor("#FF9800"), Color.parseColor("#FF5722"), Color.parseColor("#607D8B"),
+            Color.parseColor("#795548"), Color.parseColor("#69F0AE"), Color.parseColor("#E91E63")
+    };
 
     IEdk.IEE_DataChannel_t[] Channel_list = {
             IEdk.IEE_DataChannel_t.IED_AF3, IEdk.IEE_DataChannel_t.IED_T7, IEdk.IEE_DataChannel_t.IED_T8,
@@ -83,129 +76,57 @@ public class GraphActivity extends AppCompatActivity {
 
     String[] Name_Channel = {"AF3", "T7", "T8", "AF4", "F3", "F4", "F7", "F8", "FC5", "FC6", "P7", "P8", "O1", "O2"};
 
-    private double[][] eegData = new double[14][5];
-    private int[] channelIndex;
-    private int number;
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
-    private GoogleApiClient client;
+    LinearLayout mainLayout;
 
-    @Override
-    public void onStart() {
-        super.onStart();
+    BluetoothAdapter mBluetoothAdapter;
 
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client.connect();
-        Action viewAction = Action.newAction(
-                Action.TYPE_VIEW, // TODO: choose an action type.
-                "Graph Page", // TODO: Define a title for the content shown.
-                // TODO: If you have web page content that matches this app activity's content,
-                // make sure this auto-generated web page URL is correct.
-                // Otherwise, set the URL to null.
-                Uri.parse("http://host/path"),
-                // TODO: Make sure this auto-generated app deep link URI is correct.
-                Uri.parse("android-app://com.example.grant.bluetooth_elicited_brain_stimulation/http/host/path")
-        );
-        AppIndex.AppIndexApi.start(client, viewAction);
-    }
+    private class EEGDataHandler extends Handler {
 
-    @Override
-    public void onStop() {
-        super.onStop();
-
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        Action viewAction = Action.newAction(
-                Action.TYPE_VIEW, // TODO: choose an action type.
-                "Graph Page", // TODO: Define a title for the content shown.
-                // TODO: If you have web page content that matches this app activity's content,
-                // make sure this auto-generated web page URL is correct.
-                // Otherwise, set the URL to null.
-                Uri.parse("http://host/path"),
-                // TODO: Make sure this auto-generated app deep link URI is correct.
-                Uri.parse("android-app://com.example.grant.bluetooth_elicited_brain_stimulation/http/host/path")
-        );
-        AppIndex.AppIndexApi.end(client, viewAction);
-        client.disconnect();
-    }
-
-
-    /**private static final String EXTRA_RECORD_READING =
-     "com.example.grant.bluetooth_elicited_brain_stimulation.record_reading";**/
-
-    /**
-     * Not sure if doing puttingExtra with this activity
-     * public static Intent newIntent (Context packageContext, Recording r){
-     * Intent i = new Intent(packageContext, GraphActivity.class);
-     * i.putExtra(EXTRA_RECORD_READING, r);
-     * return i;
-     * }
-     **/
-
-    private class MyHandler extends Handler {
-
-        private final WeakReference<GraphActivity> mActivity;
-
-        public MyHandler(GraphActivity activity) {
-            mActivity = new WeakReference<>(activity);
-        }
+        public EEGDataHandler() {}
 
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
-
                 case 0:
-                    int state = IEdk.IEE_EngineGetNextEvent();
-                    if (state == IEdkErrorCode.EDK_OK.ToInt()) {
-                        int eventType = IEdk.IEE_EmoEngineEventGetType();
-                        userId = IEdk.IEE_EmoEngineEventGetUserId();
-                        if (eventType == IEdk.IEE_Event_t.IEE_UserAdded.ToInt()) {
-                            Log.e("SDK", "User added");
-                            IEdk.IEE_FFTSetWindowingType(userId, IEdk.IEE_WindowsType_t.IEE_BLACKMAN);
-                            isEnablGetData = true;
-                        }
-                        if (eventType == IEdk.IEE_Event_t.IEE_UserRemoved.ToInt()) {
-                            Log.e("SDK", "User removed");
-                            isEnablGetData = false;
-                        }
-                    }
-
+                    checkEnableGetData();
                     break;
                 case 1:
-                    if (number != 0) {
-                        if (!lock) {
-                            lock = true;
-                            IEdk.IEE_ConnectEpocPlusDevice(0, false);
-                        }
-                    }
-                    /**************************************/
-                    else lock = false;
+                    checkEpocPlusConnection();
                     break;
                 case 2:
-//                    for(int i=0; i < Channel_list.length; i++)
-//                    {
-//                        data = IEdk.IEE_GetAverageBandPowers(Channel_list[i]);
-//                        if(data != null && data.length == 5){
-//                            try {
-//                                motion_writer.write(Name_Channel[i] + ",");
-//                                for(int j=0; j < data.length;j++)
-//                                    addData(data[j]);
-//                                motion_writer.newLine();
-//                            } catch (IOException e) {
-//                                // TODO Auto-generated catch block
-//                                e.printStackTrace();
-//                            }
-//                        }
-//                    }
-
-                    if (eegData != null && mIsPaused) {
-                        addEntry();
-                    }
-
+                    addEntry();
                     break;
+            }
+        }
+
+        private void checkEnableGetData()
+        {
+            int state = IEdk.IEE_EngineGetNextEvent();
+            Log.e("IEdk Error", "Error event with IEdk");
+            if (state == IEdkErrorCode.EDK_OK.ToInt()) {
+                int eventType = IEdk.IEE_EmoEngineEventGetType();
+                int userId = IEdk.IEE_EmoEngineEventGetUserId();
+                if (eventType == IEdk.IEE_Event_t.IEE_UserAdded.ToInt()) {
+                    Log.e("SDK", "User added");
+                    IEdk.IEE_FFTSetWindowingType(userId, IEdk.IEE_WindowsType_t.IEE_BLACKMAN);
+                    isEnableGetData = true;
+                }
+                else if (eventType == IEdk.IEE_Event_t.IEE_UserRemoved.ToInt()) {
+                    Log.e("SDK", "User removed");
+                    isEnableGetData = false;
+                }
+            }
+        }
+
+        private void checkEpocPlusConnection()
+        {
+            /*Connect device with Epoc Plus headset*/
+            number = IEdk.IEE_GetEpocPlusDeviceCount();
+            if (number != 0) {
+                IEdk.IEE_ConnectEpocPlusDevice(0, false);
+            }
+            else {
+                Log.e("EPOC Device Count", "Cannot connect to Epoc Plus Headset");
             }
         }
     }
@@ -213,8 +134,10 @@ public class GraphActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         Intent i = getIntent();
         channelList = i.getBooleanArrayExtra("channelList");
+
         setContentView(R.layout.activity_graph);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -224,24 +147,38 @@ public class GraphActivity extends AppCompatActivity {
         //create line chart
         mChart = new LineChart(this);
         //add to mainLayout
-        mainLayout.addView(mChart, new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, AbsListView.LayoutParams.MATCH_PARENT));
-        //mainLayout.addView(mChart);
+        mChart.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
+
+        mainLayout.addView(mChart);
 
         mPlayStopButton = (ImageButton)findViewById(R.id.start_recording_button);
-        mStatusText = (TextView)findViewById(R.id.new_recording_status_text);
 
         mPlayStopButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mIsPaused) {
+                if (mIsRecording)
+                {
+                    // Stop recording
                     mPlayStopButton.setImageResource(R.mipmap.start_recording_button);
-                    mStatusText.setText("Start recording");
-                } else {
-                    mPlayStopButton.setImageResource(R.mipmap.stop_recording_button);
-                    mStatusText.setText("Stop recording");
-
+                    Log.e("Graph Recording", "Stop Write File");
+                    StopWriteFile();
+                    isEnableWriteFile = false;
                 }
-                mIsPaused = !mIsPaused;
+                else
+                {
+                    if(isEnableGetData)
+                    {
+                        // Start recording
+                        mPlayStopButton.setImageResource(R.mipmap.stop_recording_button);
+                        Log.e("Graph Recording", "Start Write File");
+                        setDataFile();
+                        isEnableWriteFile = true;
+                    }
+                    else {
+                        Toast.makeText(GraphActivity.this, "Error: Cannot write to file!", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                mIsRecording = !mIsRecording;
             }
         });
 
@@ -257,9 +194,6 @@ public class GraphActivity extends AppCompatActivity {
 
         //data.setValueTextColor(Color.WHITE);
 
-
-        // NEW CODE
-
         final BluetoothManager bluetoothManager =
                 (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
         mBluetoothAdapter = bluetoothManager.getAdapter();
@@ -269,55 +203,7 @@ public class GraphActivity extends AppCompatActivity {
             startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
         }
 
-//        mButton = (Button) findViewById(R.id.record_btn);
-//        mButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Log.d(TAG, "Confirm button OnClickListener");
-//                if (mButton.getText().equals("Start")) {
-//                    Log.e("FFTSample", "Start Write File");
-//                    setDataFile();
-//                    isEnableWriteFile = true;
-//                    mButton.setText("Stop");
-//                } else {
-//                    Log.e("FFTSample", "Stop Write File");
-//                    StopWriteFile();
-//                    isEnableWriteFile = false;
-//                    mButton.setText("Start");
-//                }
-//            }
-//        });
-
         IEdk.IEE_EngineConnect(this, "");
-
-//        Thread processingThread = new Thread()
-//        {
-//            @Override
-//            public void run() {
-//                // TODO Auto-generated method stub
-//                super.run();
-//                while(true)
-//                {
-//                    try
-//                    {
-//                        handler.sendEmptyMessage(0);
-//                        handler.sendEmptyMessage(1);
-////                        if(isEnablGetData && isEnableWriteFile)handler.sendEmptyMessage(2);
-//                        if(isEnablGetData)handler.sendEmptyMessage(2);
-//                        Thread.sleep(50);
-//                    }
-//                    catch (Exception ex)
-//                    {
-//                        ex.printStackTrace();
-//                    }
-//                }
-//            }
-//        };
-//        processingThread.start();
-
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
     //adds all selected channels to the ArrayList of dataSets so they can be displayed
@@ -331,40 +217,11 @@ public class GraphActivity extends AppCompatActivity {
                 dataSet.setLineWidth(2.5f);
                 dataSet.setDrawCircles(false);
                 dataSet.setHighLightColor(Color.rgb(190, 190, 190));
-                //set dataSet color based on channel
-                if (i == 0) {
-                    dataSet.setColor(Color.parseColor("#F44336"));
-                } else if (i == 1) {
-                    dataSet.setColor(Color.parseColor("#9C27B0"));
-                } else if (i == 2) {
-                    dataSet.setColor(Color.parseColor("#2196F3"));
-                } else if (i == 3) {
-                    dataSet.setColor(Color.parseColor("#03A9F4"));
-                } else if (i == 4) {
-                    dataSet.setColor(Color.parseColor("#009688"));
-                } else if (i == 5) {
-                    dataSet.setColor(Color.parseColor("#4CAF50"));
-                } else if (i == 6) {
-                    dataSet.setColor(Color.parseColor("#CDDC39"));
-                } else if (i == 7) {
-                    dataSet.setColor(Color.parseColor("#FFEB3B"));
-                } else if (i == 8) {
-                    dataSet.setColor(Color.parseColor("#FF9800"));
-                } else if (i == 9) {
-                    dataSet.setColor(Color.parseColor("#FF5722"));
-                } else if (i == 10) {
-                    dataSet.setColor(Color.parseColor("#607D8B"));
-                } else if (i == 11) {
-                    dataSet.setColor(Color.parseColor("#795548"));
-                } else if (i == 12) {
-                    dataSet.setColor(Color.parseColor("#69F0AE"));
-                } else if (i == 13) {
-                    dataSet.setColor(Color.parseColor("#E91E63"));
-                }
-
-
                 dataSet.setAxisDependency(YAxis.AxisDependency.LEFT);
                 dataSet.setValueTextSize(10f);
+
+                //set dataSet color based on channel
+                dataSet.setColor(channelColors[i]);
 
                 mDataSets.add(dataSet);
                 channelIndex[counter] = i;
@@ -406,36 +263,25 @@ public class GraphActivity extends AppCompatActivity {
             public void onValueSelected(Entry e, int dataSetIndex, Highlight h) {
                 mChart.setDescription(Float.toString(e.getVal()) + " mV");
             }
-
             @Override
             public void onNothingSelected() {
                 mChart.setDescription("");
             }
         });
-
     }
 
     private void addEntry() {
-        eegData[0] = IEdk.IEE_GetAverageBandPowers(Channel_list[0]);
-        eegData[1] = IEdk.IEE_GetAverageBandPowers(Channel_list[1]);
-        eegData[2] = IEdk.IEE_GetAverageBandPowers(Channel_list[2]);
-        eegData[3] = IEdk.IEE_GetAverageBandPowers(Channel_list[3]);
-        eegData[4] = IEdk.IEE_GetAverageBandPowers(Channel_list[4]);
-        eegData[5] = IEdk.IEE_GetAverageBandPowers(Channel_list[5]);
-        eegData[6] = IEdk.IEE_GetAverageBandPowers(Channel_list[6]);
-        eegData[7] = IEdk.IEE_GetAverageBandPowers(Channel_list[7]);
-        eegData[8] = IEdk.IEE_GetAverageBandPowers(Channel_list[8]);
-        eegData[9] = IEdk.IEE_GetAverageBandPowers(Channel_list[9]);
-        eegData[10] = IEdk.IEE_GetAverageBandPowers(Channel_list[10]);
-        eegData[11] = IEdk.IEE_GetAverageBandPowers(Channel_list[11]);
-        eegData[12] = IEdk.IEE_GetAverageBandPowers(Channel_list[12]);
-        eegData[13] = IEdk.IEE_GetAverageBandPowers(Channel_list[13]);
 
         int index = 0;
+        // Get readings for chosen channels
+        for(int x = 0; x < channelIndex.length; x++)
+        {
+            eegData[x] = IEdk.IEE_GetAverageBandPowers(Channel_list[x]);
+        }
+
         for (int i = 0; i < mData.getDataSetCount(); i++) {
             mData.addXValue("");
-            mData.addEntry(
-                    new Entry((float) eegData[channelIndex[index]][0], mData.getDataSetByIndex(i).getEntryCount()), 0);
+            mData.addEntry(new Entry((float) eegData[channelIndex[index]][0], mData.getDataSetByIndex(i).getEntryCount()), 0);
             index++;
             //notify chart data have changed
             mChart.notifyDataSetChanged();
@@ -446,74 +292,50 @@ public class GraphActivity extends AppCompatActivity {
             mChart.getRootView().invalidate();
             mChart.invalidate();
         }
+
+        if(isEnableWriteFile && mIsRecording)
+        {
+            for(int i = 0; i < channelIndex.length; i++)
+            {
+                double[] data = eegData[i];
+                try {
+                    motion_writer.write(Name_Channel[i] + ",");
+                    for(double j:data)
+                        addData(j);
+                    motion_writer.newLine();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        //for simulating real time data addition
 
         new Thread(new Runnable() {
             @Override
             public void run() {
                 while (true) {
                     try {
-                        /*Connect device with Epoc Plus headset*/
-                        number = IEdk.IEE_GetEpocPlusDeviceCount();
                         handler.sendEmptyMessage(0);
                         handler.sendEmptyMessage(1);
-//                        if(isEnableGetData && isEnableWriteFile)handler.sendEmptyMessage(2);
-
-                        if (isEnablGetData && !mIsPaused) handler.sendEmptyMessage(2);
+                        if (isEnableGetData && eegData != null) handler.sendEmptyMessage(2);
                         Thread.sleep(200);
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
                 }
-                //add 100 test entries
-//                for(int i = 0; i<120; i++) {
-//                    runOnUiThread(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            addEntry(); //chart is notified of update via addEntry method
-//                        }
-//                    });
-//                    //pause between adds
-//                    try {
-//                        Thread.sleep(50);
-//                    } catch (InterruptedException e) {
-//                        //not sure what to do with errors
-//                    }
-//                }
-
             }
         }).start();
-
-    }
-
-    //method for making dataset
-    private LineDataSet createSet() {
-        LineDataSet set = new LineDataSet(null, "Beta Waves");
-        set.setDrawCircles(false);
-        set.setCubicIntensity(0.2f);
-        set.setAxisDependency(YAxis.AxisDependency.LEFT);
-        set.setColor(Color.rgb(102, 187, 106));
-        set.setCircleColor(ColorTemplate.getHoloBlue());
-        set.setLineWidth(2f);
-        set.setCircleSize(4f);
-        set.setFillAlpha(65);
-        set.setFillColor(ColorTemplate.getHoloBlue());
-        set.setHighLightColor(Color.BLACK);
-        set.setValueTextSize(10f);
-
-        return set;
     }
 
     private void setDataFile() {
         try {
             String eeg_header = "Channel , Theta ,Alpha ,Low beta ,High beta , Gamma ";
             File root = Environment.getExternalStorageDirectory();
-            String file_path = root.getAbsolutePath() + "/FFTSample/";
+            String file_path = root.getAbsolutePath() + "/EEGSample/";
             File folder = new File(file_path);
             if (!folder.exists()) {
                 folder.mkdirs();

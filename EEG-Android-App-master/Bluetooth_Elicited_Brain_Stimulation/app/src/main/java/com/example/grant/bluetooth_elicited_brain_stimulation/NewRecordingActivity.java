@@ -1,6 +1,5 @@
 package com.example.grant.bluetooth_elicited_brain_stimulation;
 
-import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -12,28 +11,15 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-
-import java.io.BufferedWriter;
-
-//import com.emotiv.insight.IEdk;
-//import com.emotiv.insight.IEdkErrorCode;
+import android.widget.Toast;
 
 public class NewRecordingActivity extends AppCompatActivity {
 
     private static final String TAG = NewRecordingActivity.class.getSimpleName();
-    private Button mButton;
-    private ListView mChannelList;private static final int REQUEST_ENABLE_BT = 1;
-    private BluetoothAdapter mBluetoothAdapter;
-    private boolean lock = false;
-    private boolean isEnablGetData = false;
-    private boolean isEnableWriteFile = false;
-    int userId;
+    private ListView mChannelList;
     boolean[] channelList = new boolean[14];
-    private BufferedWriter motion_writer;
-    /**IEdk.IEE_DataChannel_t[] Channel_list = {IEdk.IEE_DataChannel_t.IED_AF3, IEdk.IEE_DataChannel_t.IED_T7, IEdk.IEE_DataChannel_t.IED_Pz,
-     IEdk.IEE_DataChannel_t.IED_T8, IEdk.IEE_DataChannel_t.IED_AF4};
-     String[] Name_Channel = {"AF3","T7","Pz","T8","AF4"};
-     **/
+    Button mButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,19 +28,20 @@ public class NewRecordingActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         //list view will go here
 
-
         mButton = (Button) findViewById(R.id.tempButt);
         mButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
                 Log.d(TAG, "Confirm button OnClickListener");
-                Intent i = new Intent(NewRecordingActivity.this, GraphActivity.class);
-                i.putExtra("channelList", channelList);
-                startActivity(i);
-                /**Log.e("FFTSample","Start Write File");
-                setDataFile();
-                isEnableWriteFile = true;**/
-
+                if(checkChannelSelected())
+                {
+                    Intent i = new Intent(NewRecordingActivity.this, GraphActivity.class);
+                    i.putExtra("channelList", channelList);
+                    startActivity(i);
+                }
+                else {
+                    Toast.makeText(NewRecordingActivity.this, "Please select at least one channel", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -76,22 +63,28 @@ public class NewRecordingActivity extends AppCompatActivity {
         mChannelList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                String ch = (String) mChannelList.getItemAtPosition(position);
-//                Toast.makeText(getApplicationContext(),
-//                        ch + " is turned on", Toast.LENGTH_SHORT).show();
-                if(channelList[position])
-                {
+                String ch = (String) mChannelList.getItemAtPosition(position);
+                Toast.makeText(getApplicationContext(),
+                        ch + " is turned on", Toast.LENGTH_SHORT).show();
+                if (channelList[position]) {
                     channelList[position] = false;
                     mChannelList.getChildAt(position).setBackgroundColor(Color.WHITE);
-                }
-                else
-                {
+                } else {
                     channelList[position] = true;
                     mChannelList.getChildAt(position).setBackgroundColor(Color.parseColor("#DEDEDE"));
                 }
             }
         });
 
+    }
+
+    private boolean checkChannelSelected()
+    {
+        for(boolean i:channelList)
+        {
+            if(i) return true;
+        }
+        return false;
     }
 
 

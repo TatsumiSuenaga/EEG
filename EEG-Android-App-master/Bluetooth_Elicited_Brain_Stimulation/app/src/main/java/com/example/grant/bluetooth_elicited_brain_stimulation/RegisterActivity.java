@@ -11,8 +11,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import butterknife.ButterKnife;
-
 /**
  * Created by Chris on 4/12/2016.
  */
@@ -46,8 +44,6 @@ public class RegisterActivity extends AppCompatActivity{
 
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
 
-        boolean accept = false;
-
         // set title
         alertDialogBuilder.setTitle("LEGAL STUFF");
 
@@ -55,7 +51,7 @@ public class RegisterActivity extends AppCompatActivity{
         alertDialogBuilder
                 .setMessage("Do you accept the terms of this app?")
                 .setCancelable(false)
-                .setNegativeButton("I do not accept.", new DialogInterface.OnClickListener() {
+                .setNegativeButton("NO", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Intent i = new Intent(RegisterActivity.this, LoginActivity.class);
@@ -64,9 +60,9 @@ public class RegisterActivity extends AppCompatActivity{
                         toast.show();
                     }
                 })
-                .setPositiveButton("I accept.",new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog,int id) {
+                .setPositiveButton("YES",new DialogInterface.OnClickListener() {
 
+                    public void onClick(DialogInterface dialog,int id) {
                         String first = mFirst.getText().toString();
                         String last = mLast.getText().toString();
                         String email = mEmail.getText().toString();
@@ -99,11 +95,8 @@ public class RegisterActivity extends AppCompatActivity{
         // create alert dialog
         final AlertDialog alertDialog = alertDialogBuilder.create();
 
-
-
         loginScreen.setOnClickListener(new View.OnClickListener() {
             public void onClick(View arg0) {
-
                 finish();
             }
         });
@@ -112,10 +105,8 @@ public class RegisterActivity extends AppCompatActivity{
                 new View.OnClickListener()
                 {
                     public void onClick(View view){
-
                         // show it
                         alertDialog.show();
-
                     }
                 }
         );
