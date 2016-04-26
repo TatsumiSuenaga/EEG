@@ -1,7 +1,9 @@
 package com.example.grant.bluetooth_elicited_brain_stimulation;
 
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
@@ -23,6 +25,11 @@ public class ProfileActivityFragment extends Fragment {
     private Button save;
     private Button delete;
     int patientId;
+    private final String PREFS_NAME = "MyPrefsFile";
+    private final static String OPT_EMAIL="email";
+    private final String DEF_VALUE = "noemail";
+    private String clinicianEmail;
+    private int clinicianId;
 
 
     public ProfileActivityFragment() {
@@ -39,9 +46,16 @@ public class ProfileActivityFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Context context = getContext();
+        SharedPreferences settings = context.getSharedPreferences(PREFS_NAME, 0);
+        clinicianEmail = settings.getString(PREFS_NAME, DEF_VALUE);
+        ClinicianDAO clinicianDAO = new ClinicianDAO(context);
+        Clinician user = clinicianDAO.getClinician(clinicianEmail);
+        clinicianId = user.getID();
+
         patientId = (int)getArguments().getSerializable(ARG_PROFILE_ID);
         patientDAO = new PatientDAO(getActivity());
-        mPatient = patientDAO.getPatient((patientId));
+        mPatient = patientDAO.getPatient((patientId), clinicianId);
 
     }
 
@@ -60,7 +74,7 @@ public class ProfileActivityFragment extends Fragment {
                 new View.OnClickListener() {
                     public void onClick(View view) {
                         patientDAO = new PatientDAO(getActivity());
-                        Patient patient = patientDAO.getPatient(patientId);
+                        Patient patient = patientDAO.getPatient(patientId, clinicianId);
                         EditText mFirst = (EditText) v.findViewById(R.id.patient_fName);
                         EditText mLast = (EditText) v.findViewById(R.id.patient_lName);
                         EditText mAddress = (EditText) v.findViewById(R.id.location);
@@ -81,7 +95,7 @@ public class ProfileActivityFragment extends Fragment {
                 new View.OnClickListener() {
                     public void onClick(View view) {
                         patientDAO = new PatientDAO(getActivity());
-                        Patient patient = patientDAO.getPatient(patientId);
+                        Patient patient = patientDAO.getPatient(patientId, clinicianId);
                         patientDAO.deletePatient(patient);
                         Intent i = new Intent(getActivity(), ProfileListActivity.class);
                         startActivity(i);
