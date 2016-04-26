@@ -1,71 +1,127 @@
-<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
              android:layout_width="match_parent"
              android:layout_height="match_parent"
              android:layout_margin="10dp"
+              android:padding="20dp"
              android:orientation="vertical"
     >
-    <TableRow>
 
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="-50dp"
             android:src="@drawable/edit_patient"
+            android:layout_marginBottom="20dp"
             />
-    </TableRow>
-    <TableRow>
-        <EditText android:id="@+id/patient_fName"
-                  android:layout_width="match_parent"
-                  android:layout_height="wrap_content"
-            />
-    </TableRow>
-    <TableRow>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+            <TextView
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="First Name: "
+                android:paddingRight="10dp"/>
+            <EditText android:id="@+id/patient_fName"
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                />
+
+        </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="Last Name: "
+            android:paddingRight="10dp"/>
         <EditText android:id="@+id/patient_lName"
                   android:layout_width="match_parent"
                   android:layout_height="wrap_content"
             />
-    </TableRow>
+        </LinearLayout>
 
-    <TableRow>
-
-
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="Location: "
+            android:paddingRight="10dp"/>
         <EditText android:id="@+id/location"
                   android:layout_width="match_parent"
                   android:layout_height="wrap_content"
             />
+        </LinearLayout>
 
-    </TableRow>
-    <TableRow>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="Email: "
+            android:paddingRight="10dp"/>
         <EditText android:id="@+id/email"
                   android:layout_width="match_parent"
                   android:layout_height="wrap_content"
             />
-    </TableRow>
-    <TableRow>
-        <EditText android:id="@+id/ethnicity"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            />
-    </TableRow>
-    <TableRow>
+    </LinearLayout>
 
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="Ethnicity: "
+            android:paddingRight="10dp"/>
+        <EditText android:id="@+id/ethnicity"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+            />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:orientation="vertical">
         <Button
             android:id="@+id/save_patient_button"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/save_patient_button"
+            android:textColor="@color/white"
             />
 
-    </TableRow>
-    <TableRow>
 
         <Button
             android:id="@+id/delete_patient_button"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Delete"
+            android:textColor="@color/white"
             />
+    </LinearLayout>
 
-    </TableRow>
 
-</TableLayout>
+
+
+</LinearLayout>
