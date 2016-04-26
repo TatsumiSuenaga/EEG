@@ -183,6 +183,7 @@ public class GraphActivity extends AppCompatActivity {
                     }
                 }
                 mIsRecording = !mIsRecording;
+                Log.e("mIsRecording", "misrecording = "+mIsRecording);
             }
         });
 
@@ -255,14 +256,19 @@ public class GraphActivity extends AppCompatActivity {
         //adds all dataSets to mData to be displayed on graph
         mData = new LineData();
         for (LineDataSet mSet : mDataSets) {
+            Log.e("stuff","mset = "+mSet+" mDatasets = "+mDataSets);
             mData.addDataSet(mSet);
         }
         mChart.setData(mData);
 
         //get legend object and customize
         Legend legend = mChart.getLegend();
+        legend.setFormSize(10f);
         legend.setForm(Legend.LegendForm.LINE);
+        legend.setPosition(Legend.LegendPosition.BELOW_CHART_CENTER);
+
         legend.setTextColor(Color.BLUE);
+        legend.setEnabled(true);
 
         mChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
             @Override
@@ -289,15 +295,15 @@ public class GraphActivity extends AppCompatActivity {
             mData.addXValue("");
             mData.addEntry(new Entry((float) eegData[channelIndex[index]][0], mData.getDataSetByIndex(i).getEntryCount()), 0);
             index++;
-            //notify chart data have changed
-            mChart.notifyDataSetChanged();
-            //limit number of visible entries
-            mChart.setVisibleXRange(10, 10);
-            //scroll to last entry
-            mChart.moveViewToX(mData.getXValCount());
-          //  mChart.getRootView().invalidate();
-            mChart.invalidate();
         }
+        //notify chart data have changed
+        mChart.notifyDataSetChanged();
+        //limit number of visible entries
+        mChart.setVisibleXRange(10, 10);
+        //scroll to last entry
+        mChart.moveViewToX(mData.getXValCount());
+        mChart.getRootView().invalidate();
+        mChart.invalidate();
 
         if(isEnableWriteFile && mIsRecording)
         {
@@ -335,8 +341,8 @@ public class GraphActivity extends AppCompatActivity {
         //limit number of visible entries
         mChart.setVisibleXRange(10, 10);
         //scroll to last entry
-        mChart.moveViewToX(mData.getXValCount());
-//        mChart.getRootView().invalidate();
+        mChart.moveViewToX(mData.getXValCount()-5);
+        mChart.getRootView().invalidate();
         mChart.invalidate();
 
         if(isEnableWriteFile && mIsRecording)
@@ -359,7 +365,6 @@ public class GraphActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -367,13 +372,14 @@ public class GraphActivity extends AppCompatActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            if(!mUseSampleData) {
+                            if (!mUseSampleData) {
                                 handler.sendEmptyMessage(0);
                                 handler.sendEmptyMessage(1);
-                                if (isEnableGetData && eegData != null) handler.sendEmptyMessage(2);
-                            }
-                            else {
-                                addSampleEntry();
+                                if (isEnableGetData && eegData != null)
+                                    handler.sendEmptyMessage(2);
+                            } else {
+                                if(mIsRecording)
+                                    addSampleEntry();
                             }
                         }
                     });
