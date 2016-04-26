@@ -72,6 +72,7 @@ public class LoginActivity extends AppCompatActivity {
                     public void onClick(View view){
                         clinicianDAO = new ClinicianDAO(getApplicationContext());
                         String email = mEmail.getText().toString();
+                        email = email.toLowerCase();
                         String password = mPassword.getText().toString();
                         boolean can_login = false;
 
