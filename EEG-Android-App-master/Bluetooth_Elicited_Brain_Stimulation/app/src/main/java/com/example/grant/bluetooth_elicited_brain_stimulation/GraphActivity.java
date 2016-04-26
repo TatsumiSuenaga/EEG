@@ -1,11 +1,14 @@
 package com.example.grant.bluetooth_elicited_brain_stimulation;
 
 
+import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -103,7 +106,7 @@ public class GraphActivity extends AppCompatActivity {
         private void checkEnableGetData()
         {
             int state = IEdk.IEE_EngineGetNextEvent();
-            Log.e("IEdk Error", "Error event with IEdk");
+//            Log.e("IEdk Error", "Error event with IEdk");
             if (state == IEdkErrorCode.EDK_OK.ToInt()) {
                 int eventType = IEdk.IEE_EmoEngineEventGetType();
                 int userId = IEdk.IEE_EmoEngineEventGetUserId();
@@ -119,18 +122,18 @@ public class GraphActivity extends AppCompatActivity {
             }
         }
 
-        private void checkEpocPlusConnection()
-        {
+        private void checkEpocPlusConnection() {
             /*Connect device with Epoc Plus headset*/
             number = IEdk.IEE_GetEpocPlusDeviceCount();
             if (number != 0) {
                 IEdk.IEE_ConnectEpocPlusDevice(0, false);
             }
-            else {
-                Log.e("EPOC Device Count", "Cannot connect to Epoc Plus Headset");
-            }
+//            else {
+//                Log.e("EPOC Device Count", "Cannot connect to Epoc Plus Headset");
+//            }
         }
     }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -296,7 +299,6 @@ public class GraphActivity extends AppCompatActivity {
             mData.addXValue("");
             mData.addEntry(new Entry((float) eegData[channelIndex[index]][0], mData.getDataSetByIndex(i).getEntryCount()), 0);
             index++;
-
         }
         //notify chart data have changed
         mChart.notifyDataSetChanged();
@@ -343,11 +345,10 @@ public class GraphActivity extends AppCompatActivity {
             //limit number of visible entries
             mChart.setVisibleXRange(10, 10);
             //scroll to last entry
-            mChart.moveViewToX(mData.getXValCount()/mData.getDataSetCount() - 10);
+            mChart.moveViewToX(mData.getXValCount() / mData.getDataSetCount() - 10);
             mChart.getRootView().invalidate();
             mChart.invalidate();
         }
-
 
         if(isEnableWriteFile && mIsRecording)
         {
@@ -419,6 +420,9 @@ public class GraphActivity extends AppCompatActivity {
         try {
             motion_writer.flush();
             motion_writer.close();
+
+            showDialog();
+
         } catch (Exception e) {
             // TODO: handle exception
         }
@@ -445,5 +449,37 @@ public class GraphActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+    }
+
+    public void showDialog() {
+        new AlertDialog.Builder(this)
+                .setTitle("Send email")
+                .setMessage("Would you like to send the recorded EEG data?")
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        String filename="bandpowerValue.csv";
+                        File filelocation = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/EEGSample/", filename);
+                        Uri path = Uri.fromFile(filelocation);
+                        Intent emailIntent = new Intent(Intent.ACTION_SEND);
+                        // set the type to 'email'
+                        emailIntent.setType("vnd.android.cursor.dir/email");
+                        // the attachment
+                        emailIntent.putExtra(Intent.EXTRA_STREAM, path);
+                        // the mail subject
+                        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Raw EEG Data File");
+                        try {
+                            startActivity(Intent.createChooser(emailIntent , "Send email using..."));
+                        }
+                        catch (android.content.ActivityNotFoundException ex) {
+                            Toast.makeText(GraphActivity.this, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                })
+                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                })
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
     }
 }
