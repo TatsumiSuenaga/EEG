@@ -5,10 +5,6 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     >
-    <RelativeLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
-
         <!-- Login Form -->
             <LinearLayout
                 android:orientation="vertical"
@@ -86,5 +82,4 @@
                           android:textSize="16sp"/>
             </LinearLayout>
         <!-- Login Form Ends -->
-    </RelativeLayout>
 </ScrollView>
