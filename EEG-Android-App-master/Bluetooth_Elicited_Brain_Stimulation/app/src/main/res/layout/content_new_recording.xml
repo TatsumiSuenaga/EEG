@@ -45,7 +45,7 @@
         <Button
             android:id="@+id/tempButt"
             android:text="Start"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:textColor="@color/white"
@@ -58,13 +58,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             ></ListView>
-        <ListView
-            android:choiceMode="singleChoice"
-            android:id="@+id/sampleDataList"
-            android:layout_below="@id/channelList"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            ></ListView>
+
         <!--<Button-->
             <!--android:id="@+id/sampleDataButton"-->
             <!--android:text="Use Sample Data?"-->

@@ -140,8 +140,8 @@ public class GraphActivity extends AppCompatActivity {
         channelList = i.getBooleanArrayExtra("channelList");
 
         //check if using sample data was selected
-        mUseSampleData = i.getBooleanArrayExtra("sampleDataButton")[0];
-
+       // i.getBooleanExtra("sampleData",mUseSampleData);
+        mUseSampleData = true;
         setContentView(R.layout.activity_graph);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -248,10 +248,11 @@ public class GraphActivity extends AppCompatActivity {
         mChart.getXAxis().setDrawGridLines(false);
         mChart.getXAxis().setAvoidFirstLastClipping(true);
         mChart.getXAxis().setTextColor(Color.GREEN);
-        mChart.getAxisLeft().setDrawGridLines(true);
+       // mChart.getAxisLeft().setDrawGridLines(true);
         mChart.getAxisLeft().setTextColor(Color.GREEN);
         mChart.getAxisLeft().setAxisMinValue(0);
         mChart.getAxisLeft().setAxisMaxValue(20);
+
 
         //adds all dataSets to mData to be displayed on graph
         mData = new LineData();
@@ -329,7 +330,7 @@ public class GraphActivity extends AppCompatActivity {
         // Get readings for chosen channels
         for(int x = 0; x < channelIndex.length; x++)
         {
-            eegData[x][0] = (Math.random() * 4 + x*3);
+            eegData[x][0] = (Math.random() * 2 + x*3);
         }
 
         for (int i = 0; i < mData.getDataSetCount(); i++) {
@@ -342,7 +343,7 @@ public class GraphActivity extends AppCompatActivity {
             //limit number of visible entries
             mChart.setVisibleXRange(10, 10);
             //scroll to last entry
-            mChart.moveViewToX(mData.getXValCount()/mData.getDataSetCount() - 5);
+            mChart.moveViewToX(mData.getXValCount()/mData.getDataSetCount() - 10);
             mChart.getRootView().invalidate();
             mChart.invalidate();
         }
