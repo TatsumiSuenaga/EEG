@@ -49,6 +49,7 @@ public class GraphActivity extends AppCompatActivity {
     private LineData mData;
     private ImageButton mPlayStopButton;
     private boolean mIsRecording = false;
+    private boolean mUseSampleData = false;
 
     private final EEGDataHandler handler = new EEGDataHandler();
     private static final int REQUEST_ENABLE_BT = 1;
@@ -138,6 +139,9 @@ public class GraphActivity extends AppCompatActivity {
         Intent i = getIntent();
         channelList = i.getBooleanArrayExtra("channelList");
 
+        //check if using sample data was selected
+        mUseSampleData = i.getBooleanArrayExtra("sampleDataButton")[0];
+
         setContentView(R.layout.activity_graph);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -151,30 +155,30 @@ public class GraphActivity extends AppCompatActivity {
 
         mainLayout.addView(mChart);
 
-        mPlayStopButton = (ImageButton)findViewById(R.id.start_recording_button);
+        mPlayStopButton = (ImageButton) findViewById(R.id.start_recording_button);
 
         mPlayStopButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mIsRecording)
-                {
+                if (mIsRecording) {
                     // Stop recording
                     mPlayStopButton.setImageResource(R.mipmap.start_recording_button);
                     Log.e("Graph Recording", "Stop Write File");
                     StopWriteFile();
                     isEnableWriteFile = false;
-                }
-                else
-                {
-                    if(isEnableGetData)
-                    {
+                } else {
+                    if (isEnableGetData) {
                         // Start recording
                         mPlayStopButton.setImageResource(R.mipmap.stop_recording_button);
                         Log.e("Graph Recording", "Start Write File");
                         setDataFile();
                         isEnableWriteFile = true;
-                    }
-                    else {
+                    } else if (mUseSampleData) {
+                        mPlayStopButton.setImageResource(R.mipmap.stop_recording_button);
+                        Log.e("Graph Sample Recording", "Start Write File");
+                        setDataFile();
+                        isEnableWriteFile = true;
+                    } else {
                         Toast.makeText(GraphActivity.this, "Error: Cannot write to file!", Toast.LENGTH_SHORT).show();
                     }
                 }
@@ -193,17 +197,19 @@ public class GraphActivity extends AppCompatActivity {
 
 
         //data.setValueTextColor(Color.WHITE);
+        //if not a sample data recording
+        if (!mUseSampleData) {
+            final BluetoothManager bluetoothManager =
+                    (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
+            mBluetoothAdapter = bluetoothManager.getAdapter();
 
-        final BluetoothManager bluetoothManager =
-                (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
-        mBluetoothAdapter = bluetoothManager.getAdapter();
+            if (!mBluetoothAdapter.isEnabled()) {
+                Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+            }
 
-        if (!mBluetoothAdapter.isEnabled()) {
-            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+            IEdk.IEE_EngineConnect(this, "");
         }
-
-        IEdk.IEE_EngineConnect(this, "");
     }
 
     //adds all selected channels to the ArrayList of dataSets so they can be displayed
@@ -289,9 +295,49 @@ public class GraphActivity extends AppCompatActivity {
             mChart.setVisibleXRange(10, 10);
             //scroll to last entry
             mChart.moveViewToX(mData.getXValCount());
-            mChart.getRootView().invalidate();
+          //  mChart.getRootView().invalidate();
             mChart.invalidate();
         }
+
+        if(isEnableWriteFile && mIsRecording)
+        {
+            for(int i = 0; i < channelIndex.length; i++)
+            {
+                double[] data = eegData[i];
+                try {
+                    motion_writer.write(Name_Channel[i] + ",");
+                    for(double j:data)
+                        addData(j);
+                    motion_writer.newLine();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    private void addSampleEntry() {
+
+        int index = 0;
+        // Get readings for chosen channels
+        for(int x = 0; x < channelIndex.length; x++)
+        {
+            eegData[x][0] = (Math.random() * 8);
+        }
+
+        for (int i = 0; i < mData.getDataSetCount(); i++) {
+            mData.addXValue("");
+            mData.addEntry(new Entry((float) eegData[channelIndex[index]][0], mData.getDataSetByIndex(i).getEntryCount()), 0);
+            index++;
+        }
+        //notify chart data have changed
+        mChart.notifyDataSetChanged();
+        //limit number of visible entries
+        mChart.setVisibleXRange(10, 10);
+        //scroll to last entry
+        mChart.moveViewToX(mData.getXValCount());
+//        mChart.getRootView().invalidate();
+        mChart.invalidate();
 
         if(isEnableWriteFile && mIsRecording)
         {
@@ -318,10 +364,21 @@ public class GraphActivity extends AppCompatActivity {
             @Override
             public void run() {
                 while (true) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if(!mUseSampleData) {
+                                handler.sendEmptyMessage(0);
+                                handler.sendEmptyMessage(1);
+                                if (isEnableGetData && eegData != null) handler.sendEmptyMessage(2);
+                            }
+                            else {
+                                addSampleEntry();
+                            }
+                        }
+                    });
+
                     try {
-                        handler.sendEmptyMessage(0);
-                        handler.sendEmptyMessage(1);
-                        if (isEnableGetData && eegData != null) handler.sendEmptyMessage(2);
                         Thread.sleep(200);
                     } catch (Exception ex) {
                         ex.printStackTrace();
