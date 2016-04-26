@@ -1,6 +1,8 @@
 package com.example.grant.bluetooth_elicited_brain_stimulation;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -24,6 +26,11 @@ public class ProfileListActivityFragment extends Fragment {
     private RecyclerView mProfileRecyclerView;
     private ProfileAdapter mProfileAdapter;
     private PatientDAO patientDAO;
+    private final String PREFS_NAME = "MyPrefsFile";
+    private final static String OPT_EMAIL="email";
+    private final String DEF_VALUE = "noemail";
+    private String clinicianEmail;
+    private int clinicianId;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -44,12 +51,17 @@ public class ProfileListActivityFragment extends Fragment {
             }
         });
 
-
         return view;
     }
 
     private void updateUI() {
-        List<Patient> patients = patientDAO.getPatients();
+        Context context = getContext();
+        SharedPreferences settings = context.getSharedPreferences(PREFS_NAME, 0);
+        clinicianEmail = settings.getString(OPT_EMAIL, DEF_VALUE);
+        ClinicianDAO clinicianDAO = new ClinicianDAO(context);
+        Clinician user = clinicianDAO.getClinician(clinicianEmail);
+        clinicianId = user.getID();
+        List<Patient> patients = patientDAO.getPatients(clinicianId);
         mProfileAdapter = new ProfileAdapter(patients);
         mProfileRecyclerView.setAdapter(mProfileAdapter);
     }
