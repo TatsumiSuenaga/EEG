@@ -21,7 +21,7 @@ public class Recording implements Parcelable{
         super();
     }
 
-    public Recording(long date, String muscle, Patient patient){
+    public Recording(long date, Patient patient){
         mDate = date;
         mPatient = patient;
     }

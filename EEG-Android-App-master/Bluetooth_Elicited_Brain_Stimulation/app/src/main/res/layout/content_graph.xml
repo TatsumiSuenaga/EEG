@@ -15,20 +15,4 @@
     tools:context="com.example.grant.bluetooth_elicited_brain_stimulation.RecordReadingActivity"
     android:orientation="vertical">
 
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/start_recording_button"
-        android:src="@mipmap/start_recording_button"
-        android:contentDescription="@string/start_recording_accessibility"
-        android:background="@null" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="@string/new_recording_status_text_string"
-        android:id="@+id/new_recording_status_text"/>
-
-
 </LinearLayout>

@@ -11,8 +11,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import butterknife.ButterKnife;
-
 /**
  * Created by Chris on 4/12/2016.
  */
@@ -22,6 +20,7 @@ public class RegisterActivity extends AppCompatActivity{
     EditText mLast;
     EditText mEmail;
     EditText mPassword;
+    EditText mPasswordConfirm;
     ClinicianDAO clinicianDAO;
 
     @Override
@@ -42,11 +41,11 @@ public class RegisterActivity extends AppCompatActivity{
 
         mPassword = (EditText)findViewById(R.id.reg_password);
 
+        mPasswordConfirm = (EditText)findViewById(R.id.reg_password_confirm);
+
         clinicianDAO = new ClinicianDAO(getApplicationContext());
 
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-
-        boolean accept = false;
 
         // set title
         alertDialogBuilder.setTitle("LEGAL STUFF");
@@ -55,7 +54,7 @@ public class RegisterActivity extends AppCompatActivity{
         alertDialogBuilder
                 .setMessage("Do you accept the terms of this app?")
                 .setCancelable(false)
-                .setNegativeButton("I do not accept.", new DialogInterface.OnClickListener() {
+                .setNegativeButton("NO", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Intent i = new Intent(RegisterActivity.this, LoginActivity.class);
@@ -64,16 +63,17 @@ public class RegisterActivity extends AppCompatActivity{
                         toast.show();
                     }
                 })
-                .setPositiveButton("I accept.",new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog,int id) {
+                .setPositiveButton("YES",new DialogInterface.OnClickListener() {
 
+                    public void onClick(DialogInterface dialog,int id) {
                         String first = mFirst.getText().toString();
                         String last = mLast.getText().toString();
                         String email = mEmail.getText().toString();
                         email = email.toLowerCase();
                         String password = mPassword.getText().toString();
+                        String confirmPassword = mPasswordConfirm.getText().toString();
 
-                        boolean validated = Validate(password, email);
+                        boolean validated = Validate(password, confirmPassword, email);
 
                         Clinician clinician = new Clinician(first, last, email, password);
                         clinician.setID(clinicianDAO.maxID() + 1);
@@ -99,11 +99,8 @@ public class RegisterActivity extends AppCompatActivity{
         // create alert dialog
         final AlertDialog alertDialog = alertDialogBuilder.create();
 
-
-
         loginScreen.setOnClickListener(new View.OnClickListener() {
             public void onClick(View arg0) {
-
                 finish();
             }
         });
@@ -112,23 +109,21 @@ public class RegisterActivity extends AppCompatActivity{
                 new View.OnClickListener()
                 {
                     public void onClick(View view){
-
                         // show it
                         alertDialog.show();
-
                     }
                 }
         );
     }
 
-    private boolean Validate(String password, String email){
+    private boolean Validate(String password, String confirmPassword, String email){
         boolean isValid = true;
 
         ClinicianDAO clinicianDAO = new ClinicianDAO(getApplicationContext());
 
         Clinician test = clinicianDAO.getClinician(email);
 
-        if(password.length() < 4 || password.isEmpty()){
+        if(password.length() < 4 || password.isEmpty() || !password.equals(confirmPassword)){
             isValid = false;
         }
         if(!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches() || email.isEmpty() || test.getID() != -1){
