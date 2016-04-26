@@ -73,20 +73,12 @@
         <activity
             android:name=".ProfileListActivity"
             android:label="@string/title_activity_profile_list"
-            android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.grant.bluetooth_elicited_brain_stimulation.MainActivity"/>
         </activity>
         <activity
             android:name=".ProfileActivity"
             android:label="@string/title_activity_profile"
-            android:parentActivityName=".ProfileListActivity"
             android:theme="@style/AppTheme">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.grant.bluetooth_elicited_brain_stimulation.ProfileListActivity"/>
         </activity>
         <activity
             android:name=".LoginActivity"
