@@ -70,6 +70,7 @@ public class RegisterActivity extends AppCompatActivity{
                         String first = mFirst.getText().toString();
                         String last = mLast.getText().toString();
                         String email = mEmail.getText().toString();
+                        email = email.toLowerCase();
                         String password = mPassword.getText().toString();
 
                         boolean validated = Validate(password, email);
