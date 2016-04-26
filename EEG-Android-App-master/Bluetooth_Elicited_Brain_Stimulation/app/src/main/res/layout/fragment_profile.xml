@@ -10,7 +10,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="-50dp"
-            android:src="@drawable/profileface"
+            android:src="@drawable/edit_patient"
             />
     </TableRow>
     <TableRow>
