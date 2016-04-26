@@ -13,6 +13,8 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.util.Arrays;
+
 public class NewRecordingActivity extends AppCompatActivity {
 
     private static final String TAG = NewRecordingActivity.class.getSimpleName();
@@ -28,6 +30,8 @@ public class NewRecordingActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         //list view will go here
+        Arrays.fill(channelList, Boolean.FALSE); //added
+        sampleDataButton[0] = true; //added
 
         mButton = (Button) findViewById(R.id.tempButt);
         mButton.setOnClickListener(new View.OnClickListener(){
@@ -52,8 +56,8 @@ public class NewRecordingActivity extends AppCompatActivity {
                 "FC5", "T7", "P7", "O1", "O2", "P8",
                 "T8", "FC6", "F4", "F8", "AF4"};
 
-        mSampleDataList = (ListView) findViewById(R.id.sampleDataList);
-        String[] sampleDataToggle = new String[]{("Use Sample Data?")};
+//        mSampleDataList = (ListView) findViewById(R.id.sampleDataList);
+//        String[] sampleDataToggle = new String[]{("Use Sample Data?")};
 
         /**First Param: Context
          * Second Param: Layout for the Row
@@ -63,8 +67,8 @@ public class NewRecordingActivity extends AppCompatActivity {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(NewRecordingActivity.this,
                 android.R.layout.simple_list_item_1, android.R.id.text1, channels );
 
-        ArrayAdapter<String> adapter2 = new ArrayAdapter<>(NewRecordingActivity.this,
-                android.R.layout.simple_list_item_1,android.R.id.text1, sampleDataToggle);
+//        ArrayAdapter<String> adapter2 = new ArrayAdapter<>(NewRecordingActivity.this,
+//                android.R.layout.simple_list_item_2,android.R.id.text1, sampleDataToggle);
 
         //Temporary adapter just for UI, this will be later made into different fragment probably
         mChannelList.setAdapter(adapter);
@@ -74,32 +78,33 @@ public class NewRecordingActivity extends AppCompatActivity {
                 String ch = (String) mChannelList.getItemAtPosition(position);
                 Toast.makeText(getApplicationContext(),
                         ch + " is turned on", Toast.LENGTH_SHORT).show();
-                if (channelList[position]) {
-                    channelList[position] = false;
-                    mChannelList.getChildAt(position).setBackgroundColor(Color.WHITE);
-                } else {
+                if (channelList[position] == false) {
                     channelList[position] = true;
                     mChannelList.getChildAt(position).setBackgroundColor(Color.parseColor("#DEDEDE"));
+
+                } else if (channelList[position] == true){
+                    channelList[position] = false;
+                    mChannelList.getChildAt(position).setBackgroundColor(Color.WHITE);
                 }
             }
         });
 
-        mSampleDataList.setAdapter(adapter2);
-        mSampleDataList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String ch = (String)mSampleDataList.getItemAtPosition(0);
-                Toast.makeText(getApplicationContext(),
-                        ch + "is turned on", Toast.LENGTH_SHORT).show();
-                if(sampleDataButton[0]) {
-                    sampleDataButton[0] = false;
-                    mSampleDataList.getChildAt(0).setBackgroundColor(Color.WHITE);
-                } else {
-                    sampleDataButton[0] = true;
-                    mSampleDataList.getChildAt(0).setBackgroundColor(Color.parseColor("#DEDEDE"));
-                }
-            }
-        });
+//        mSampleDataList.setAdapter(adapter2);
+//        mSampleDataList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                String ch = (String)mSampleDataList.getItemAtPosition(0);
+//                Toast.makeText(getApplicationContext(),
+//                        ch + "is turned on", Toast.LENGTH_SHORT).show();
+//                if(sampleDataButton[0]) {
+//                    sampleDataButton[0] = false;
+//                    mSampleDataList.getChildAt(0).setBackgroundColor(Color.WHITE);
+//                } else {
+//                    sampleDataButton[0] = true;
+//                    mSampleDataList.getChildAt(0).setBackgroundColor(Color.parseColor("#DEDEDE"));
+//                }
+//            }
+//        });
 
     }
 
