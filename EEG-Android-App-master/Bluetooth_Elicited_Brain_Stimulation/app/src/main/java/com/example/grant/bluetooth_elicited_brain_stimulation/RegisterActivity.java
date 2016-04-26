@@ -20,6 +20,7 @@ public class RegisterActivity extends AppCompatActivity{
     EditText mLast;
     EditText mEmail;
     EditText mPassword;
+    EditText mPasswordConfirm;
     ClinicianDAO clinicianDAO;
 
     @Override
@@ -39,6 +40,8 @@ public class RegisterActivity extends AppCompatActivity{
         mEmail = (EditText)findViewById(R.id.reg_email);
 
         mPassword = (EditText)findViewById(R.id.reg_password);
+
+        mPasswordConfirm = (EditText)findViewById(R.id.reg_password_confirm);
 
         clinicianDAO = new ClinicianDAO(getApplicationContext());
 
@@ -68,8 +71,9 @@ public class RegisterActivity extends AppCompatActivity{
                         String email = mEmail.getText().toString();
                         email = email.toLowerCase();
                         String password = mPassword.getText().toString();
+                        String confirmPassword = mPasswordConfirm.getText().toString();
 
-                        boolean validated = Validate(password, email);
+                        boolean validated = Validate(password, confirmPassword, email);
 
                         Clinician clinician = new Clinician(first, last, email, password);
                         clinician.setID(clinicianDAO.maxID() + 1);
@@ -112,14 +116,14 @@ public class RegisterActivity extends AppCompatActivity{
         );
     }
 
-    private boolean Validate(String password, String email){
+    private boolean Validate(String password, String confirmPassword, String email){
         boolean isValid = true;
 
         ClinicianDAO clinicianDAO = new ClinicianDAO(getApplicationContext());
 
         Clinician test = clinicianDAO.getClinician(email);
 
-        if(password.length() < 4 || password.isEmpty()){
+        if(password.length() < 4 || password.isEmpty() || !password.equals(confirmPassword)){
             isValid = false;
         }
         if(!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches() || email.isEmpty() || test.getID() != -1){
