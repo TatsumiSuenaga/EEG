@@ -18,14 +18,19 @@
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                   android:layout_width="match_parent"
                   android:layout_height="match_parent"
-                  android:orientation="vertical" >
+                  android:orientation="vertical"
+                  android:layout_margin="5dp"
+                  android:background="@color/white"
+                  android:elevation="2.5dp"
+                  android:paddingTop="3dp"
+                  android:paddingRight="3dp"
+                  android:paddingLeft="3dp"
+        >
 
         <ListView
             android:id="@+id/listViewRecords"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:dividerHeight="0.1dp"
-            android:divider="#0000CC"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             >
         </ListView>
 
