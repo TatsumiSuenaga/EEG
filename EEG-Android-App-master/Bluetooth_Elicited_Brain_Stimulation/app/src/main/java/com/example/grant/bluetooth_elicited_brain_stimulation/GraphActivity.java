@@ -339,7 +339,7 @@ public class GraphActivity extends AppCompatActivity {
             mData.addXValue("");
             mData.addEntry(new Entry((float) eegData[channelIndex[index]][0], mData.getDataSetByIndex(i).getEntryCount()), i);
             index++;
-            Log.e("stuff","mDataByIndex = "+mData.getDataSetByIndex(i)+" mDatasets = "+mDataSets +" eegData = "+eegData[channelIndex[index]][0]);
+            //Log.e("stuff","mDataByIndex = "+mData.getDataSetByIndex(i)+" mDatasets = "+mDataSets +" eegData = "+eegData[channelIndex[index]][0]);
             //notify chart data have changed
             mChart.notifyDataSetChanged();
             //limit number of visible entries
@@ -383,7 +383,7 @@ public class GraphActivity extends AppCompatActivity {
                                 if (isEnableGetData && eegData != null)
                                     handler.sendEmptyMessage(2);
                             } else {
-                                if(mIsRecording)
+//                                if(mIsRecording)
                                     addSampleEntry();
                             }
                         }
