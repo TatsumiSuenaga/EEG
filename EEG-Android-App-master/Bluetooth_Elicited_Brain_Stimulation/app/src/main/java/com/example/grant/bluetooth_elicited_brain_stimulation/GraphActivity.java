@@ -1,18 +1,22 @@
 package com.example.grant.bluetooth_elicited_brain_stimulation;
 
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -63,6 +67,9 @@ public class GraphActivity extends AppCompatActivity {
     private double[][] eegData = new double[14][5];
     private int[] channelIndex;
     int number;
+    int counter = 0;
+
+    private static final int REQUEST_WRITE_STORAGE = 112;
 
     private int[] channelColors = new int[] {Color.parseColor("#F44336"),Color.parseColor("#9C27B0"),
             Color.parseColor("#2196F3"), Color.parseColor("#03A9F4"), Color.parseColor("#009688"),
@@ -163,30 +170,35 @@ public class GraphActivity extends AppCompatActivity {
         mPlayStopButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mIsRecording) {
-                    // Stop recording
-                    mPlayStopButton.setImageResource(R.mipmap.start_recording_button);
-                    Log.e("Graph Recording", "Stop Write File");
-                    StopWriteFile();
-                    isEnableWriteFile = false;
-                } else {
-                    if (isEnableGetData) {
-                        // Start recording
-                        mPlayStopButton.setImageResource(R.mipmap.stop_recording_button);
-                        Log.e("Graph Recording", "Start Write File");
-                        setDataFile();
-                        isEnableWriteFile = true;
-                    } else if (mUseSampleData) {
-                        mPlayStopButton.setImageResource(R.mipmap.stop_recording_button);
-                        Log.e("Graph Sample Recording", "Start Write File");
-                        setDataFile();
-                        isEnableWriteFile = true;
+                if(validPermission()) {
+                    if (mIsRecording) {
+                        // Stop recording
+                        mPlayStopButton.setImageResource(R.mipmap.start_recording_button);
+                        Log.e("Graph Recording", "Stop Write File");
+                        StopWriteFile();
+                        isEnableWriteFile = false;
                     } else {
-                        Toast.makeText(GraphActivity.this, "Error: Cannot write to file!", Toast.LENGTH_SHORT).show();
+                        if (isEnableGetData) {
+                            // Start recording
+                            mPlayStopButton.setImageResource(R.mipmap.stop_recording_button);
+                            setDataFile();
+                            isEnableWriteFile = true;
+                            Log.e("Graph Recording", "Start Write File");
+                        } else if (mUseSampleData) {
+                            mPlayStopButton.setImageResource(R.mipmap.stop_recording_button);
+                            setDataFile();
+                            isEnableWriteFile = true;
+                            Log.e("Graph Sample Recording", "Start Write File");
+                        } else {
+                            Toast.makeText(GraphActivity.this, "Error: Cannot write to file!", Toast.LENGTH_SHORT).show();
+                        }
+                        mIsRecording = !mIsRecording;
                     }
+                    Log.e("mIsRecording", "misrecording = "+mIsRecording);
                 }
-                mIsRecording = !mIsRecording;
-                Log.e("mIsRecording", "misrecording = "+mIsRecording);
+                else {
+                    getWritePermission();
+                }
             }
         });
 
@@ -218,7 +230,7 @@ public class GraphActivity extends AppCompatActivity {
 
     //adds all selected channels to the ArrayList of dataSets so they can be displayed
     private void initializeDataChannels() {
-        int counter = 0;
+        counter = 0;
         channelIndex = new int[channelList.length];
         for (int i = 0; i < channelList.length; i++) {
             //if the channel is true, it was selected for data display
@@ -254,7 +266,7 @@ public class GraphActivity extends AppCompatActivity {
        // mChart.getAxisLeft().setDrawGridLines(true);
         mChart.getAxisLeft().setTextColor(Color.GREEN);
         mChart.getAxisLeft().setAxisMinValue(0);
-        mChart.getAxisLeft().setAxisMaxValue(channelList.length*3);
+        mChart.getAxisLeft().setAxisMaxValue(counter*3);
 
         //adds all dataSets to mData to be displayed on graph
         mData = new LineData();
@@ -308,7 +320,7 @@ public class GraphActivity extends AppCompatActivity {
         mChart.getRootView().invalidate();
         mChart.invalidate();
 
-        if(isEnableWriteFile && mIsRecording)
+        if(isEnableWriteFile && mIsRecording && motion_writer != null)
         {
             for(int i = 0; i < channelIndex.length; i++)
             {
@@ -349,7 +361,7 @@ public class GraphActivity extends AppCompatActivity {
             mChart.invalidate();
         }
 
-        if(isEnableWriteFile && mIsRecording)
+        if(isEnableWriteFile && mIsRecording && motion_writer != null)
         {
             for(int i = 0; i < channelIndex.length; i++)
             {
@@ -396,6 +408,23 @@ public class GraphActivity extends AppCompatActivity {
                 }
             }
         }).start();
+    }
+
+    private boolean validPermission() {
+        return (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                == PackageManager.PERMISSION_GRANTED);
+    }
+
+    private void getWritePermission()
+    {
+        // Should we show an explanation?
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    REQUEST_WRITE_STORAGE);
+        }
     }
 
     private void setDataFile() {
