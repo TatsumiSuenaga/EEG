@@ -254,8 +254,7 @@ public class GraphActivity extends AppCompatActivity {
        // mChart.getAxisLeft().setDrawGridLines(true);
         mChart.getAxisLeft().setTextColor(Color.GREEN);
         mChart.getAxisLeft().setAxisMinValue(0);
-        mChart.getAxisLeft().setAxisMaxValue(20);
-
+        mChart.getAxisLeft().setAxisMaxValue(channelList.length*3);
 
         //adds all dataSets to mData to be displayed on graph
         mData = new LineData();
