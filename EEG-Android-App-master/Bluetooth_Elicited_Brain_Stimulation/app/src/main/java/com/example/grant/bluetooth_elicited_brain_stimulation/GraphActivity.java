@@ -294,6 +294,7 @@ public class GraphActivity extends AppCompatActivity {
                 dataSet.setAxisDependency(YAxis.AxisDependency.LEFT);
                 dataSet.setValueTextSize(10f);
                 dataSet.setDrawCubic(true);
+                dataSet.setCubicIntensity(0.2f);
                 //set dataSet color based on channel
                 dataSet.setColor(channelColors[i]);
 
@@ -405,7 +406,7 @@ public class GraphActivity extends AppCompatActivity {
         //populate each channel's dataset with eegdata
         for (int i = 0; i < mData.getDataSetCount(); i++) {
             mData.addXValue("");
-            mData.addEntry(new Entry((float) eegData[channelIndex[index]][0], mData.getDataSetByIndex(i).getEntryCount()), i);
+            mData.addEntry(new Entry((float) eegData[i][0], mData.getDataSetByIndex(i).getEntryCount()), i);
             index++;
             //Log.e("stuff","mDataByIndex = "+mData.getDataSetByIndex(i)+" mDatasets = "+mDataSets +" eegData = "+eegData[channelIndex[index]][0]);
             //notify chart data have changed
