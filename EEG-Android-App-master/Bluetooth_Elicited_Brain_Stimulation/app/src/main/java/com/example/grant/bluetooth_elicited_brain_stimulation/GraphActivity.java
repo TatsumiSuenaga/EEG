@@ -321,7 +321,7 @@ public class GraphActivity extends AppCompatActivity {
         mChart.getXAxis().setDrawGridLines(false);
         mChart.getXAxis().setAvoidFirstLastClipping(true);
         mChart.getXAxis().setTextColor(Color.parseColor("#66BB6A"));
-        // mChart.getAxisLeft().setDrawGridLines(true);
+        mChart.getAxisLeft().setDrawGridLines(false);
         mChart.getAxisLeft().setTextColor(Color.GREEN);
         mChart.getAxisLeft().setAxisMinValue(0);
         mChart.getAxisLeft().setAxisMaxValue(counter * 3);
