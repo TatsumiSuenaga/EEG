@@ -5,11 +5,13 @@ import android.Manifest;
 import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -27,6 +29,7 @@ import android.widget.Toast;
 
 import com.emotiv.insight.IEdk;
 import com.emotiv.insight.IEdkErrorCode;
+import com.github.mikephil.charting.charts.Chart;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.YAxis;
@@ -35,6 +38,9 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.common.api.GoogleApiClient;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -44,7 +50,7 @@ import java.util.ArrayList;
 
 /**
  * Created by alex m on 3/9/16
- *
+ * <p/>
  * Views: content_graph.xml and activity_graph.xml
  */
 public class GraphActivity extends AppCompatActivity {
@@ -71,7 +77,7 @@ public class GraphActivity extends AppCompatActivity {
 
     private static final int REQUEST_WRITE_STORAGE = 112;
 
-    private int[] channelColors = new int[] {Color.parseColor("#F44336"),Color.parseColor("#9C27B0"),
+    private int[] channelColors = new int[]{Color.parseColor("#F44336"), Color.parseColor("#9C27B0"),
             Color.parseColor("#2196F3"), Color.parseColor("#03A9F4"), Color.parseColor("#009688"),
             Color.parseColor("#4CAF50"), Color.parseColor("#CDDC39"), Color.parseColor("#FFEB3B"),
             Color.parseColor("#FF9800"), Color.parseColor("#FF5722"), Color.parseColor("#607D8B"),
@@ -90,10 +96,56 @@ public class GraphActivity extends AppCompatActivity {
     LinearLayout mainLayout;
 
     BluetoothAdapter mBluetoothAdapter;
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    private GoogleApiClient client;
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client.connect();
+        Action viewAction = Action.newAction(
+                Action.TYPE_VIEW, // TODO: choose an action type.
+                "Graph Page", // TODO: Define a title for the content shown.
+                // TODO: If you have web page content that matches this app activity's content,
+                // make sure this auto-generated web page URL is correct.
+                // Otherwise, set the URL to null.
+                Uri.parse("http://host/path"),
+                // TODO: Make sure this auto-generated app deep link URI is correct.
+                Uri.parse("android-app://com.example.grant.bluetooth_elicited_brain_stimulation/http/host/path")
+        );
+        AppIndex.AppIndexApi.start(client, viewAction);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        Action viewAction = Action.newAction(
+                Action.TYPE_VIEW, // TODO: choose an action type.
+                "Graph Page", // TODO: Define a title for the content shown.
+                // TODO: If you have web page content that matches this app activity's content,
+                // make sure this auto-generated web page URL is correct.
+                // Otherwise, set the URL to null.
+                Uri.parse("http://host/path"),
+                // TODO: Make sure this auto-generated app deep link URI is correct.
+                Uri.parse("android-app://com.example.grant.bluetooth_elicited_brain_stimulation/http/host/path")
+        );
+        AppIndex.AppIndexApi.end(client, viewAction);
+        client.disconnect();
+    }
 
     private class EEGDataHandler extends Handler {
 
-        public EEGDataHandler() {}
+        public EEGDataHandler() {
+        }
 
         @Override
         public void handleMessage(Message msg) {
@@ -110,8 +162,7 @@ public class GraphActivity extends AppCompatActivity {
             }
         }
 
-        private void checkEnableGetData()
-        {
+        private void checkEnableGetData() {
             int state = IEdk.IEE_EngineGetNextEvent();
 //            Log.e("IEdk Error", "Error event with IEdk");
             if (state == IEdkErrorCode.EDK_OK.ToInt()) {
@@ -121,8 +172,7 @@ public class GraphActivity extends AppCompatActivity {
                     Log.e("SDK", "User added");
                     IEdk.IEE_FFTSetWindowingType(userId, IEdk.IEE_WindowsType_t.IEE_BLACKMAN);
                     isEnableGetData = true;
-                }
-                else if (eventType == IEdk.IEE_Event_t.IEE_UserRemoved.ToInt()) {
+                } else if (eventType == IEdk.IEE_Event_t.IEE_UserRemoved.ToInt()) {
                     Log.e("SDK", "User removed");
                     isEnableGetData = false;
                 }
@@ -150,7 +200,7 @@ public class GraphActivity extends AppCompatActivity {
         channelList = i.getBooleanArrayExtra("channelList");
 
         //check if using sample data was selected
-       // i.getBooleanExtra("sampleData",mUseSampleData);
+        // i.getBooleanExtra("sampleData",mUseSampleData);
         mUseSampleData = true;
         setContentView(R.layout.activity_graph);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -170,7 +220,7 @@ public class GraphActivity extends AppCompatActivity {
         mPlayStopButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(validPermission()) {
+                if (validPermission()) {
                     if (mIsRecording) {
                         // Stop recording
                         mPlayStopButton.setImageResource(R.mipmap.start_recording_button);
@@ -192,11 +242,10 @@ public class GraphActivity extends AppCompatActivity {
                         } else {
                             Toast.makeText(GraphActivity.this, "Error: Cannot write to file!", Toast.LENGTH_SHORT).show();
                         }
-                        mIsRecording = !mIsRecording;
                     }
-                    Log.e("mIsRecording", "misrecording = "+mIsRecording);
-                }
-                else {
+                    mIsRecording = !mIsRecording;
+                    Log.e("mIsRecording", "misrecording = " + mIsRecording);
+                } else {
                     getWritePermission();
                 }
             }
@@ -226,6 +275,9 @@ public class GraphActivity extends AppCompatActivity {
 
             IEdk.IEE_EngineConnect(this, "");
         }
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
     //adds all selected channels to the ArrayList of dataSets so they can be displayed
@@ -241,7 +293,7 @@ public class GraphActivity extends AppCompatActivity {
                 dataSet.setHighLightColor(Color.rgb(190, 190, 190));
                 dataSet.setAxisDependency(YAxis.AxisDependency.LEFT);
                 dataSet.setValueTextSize(10f);
-
+                dataSet.setDrawCubic(true);
                 //set dataSet color based on channel
                 dataSet.setColor(channelColors[i]);
 
@@ -254,24 +306,30 @@ public class GraphActivity extends AppCompatActivity {
 
     private void configureChart() {
         mChart.setDescription("");
+        Paint paint = mChart.getPaint(Chart.PAINT_INFO);
+        paint.setTextSize(40f);
+        paint.setColor(Color.parseColor("#66BB6A"));
+        mChart.setNoDataText("Hit play button to begin graphing channels");
         mChart.setDrawGridBackground(false);
         mChart.getAxisRight().setEnabled(false);
+
         mChart.setTouchEnabled(true);
         mChart.setScaleEnabled(false);
         mChart.setPinchZoom(true);
         mChart.getXAxis().setDrawAxisLine(false);
         mChart.getXAxis().setDrawGridLines(false);
         mChart.getXAxis().setAvoidFirstLastClipping(true);
-        mChart.getXAxis().setTextColor(Color.GREEN);
-       // mChart.getAxisLeft().setDrawGridLines(true);
+        mChart.getXAxis().setTextColor(Color.parseColor("#66BB6A"));
+        // mChart.getAxisLeft().setDrawGridLines(true);
         mChart.getAxisLeft().setTextColor(Color.GREEN);
         mChart.getAxisLeft().setAxisMinValue(0);
-        mChart.getAxisLeft().setAxisMaxValue(counter*3);
+        mChart.getAxisLeft().setAxisMaxValue(counter * 3);
+
 
         //adds all dataSets to mData to be displayed on graph
         mData = new LineData();
         for (LineDataSet mSet : mDataSets) {
-            Log.e("stuff","mset = "+mSet+" mDatasets = "+mDataSets);
+            //Log.e("stuff","mset = "+mSet+" mDatasets = "+mDataSets);
             mData.addDataSet(mSet);
         }
         mChart.setData(mData);
@@ -285,11 +343,13 @@ public class GraphActivity extends AppCompatActivity {
         legend.setTextColor(Color.BLUE);
         legend.setEnabled(true);
 
+        //highlights selected graph points and displays units
         mChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
             @Override
             public void onValueSelected(Entry e, int dataSetIndex, Highlight h) {
                 mChart.setDescription(Float.toString(e.getVal()) + " mV");
             }
+
             @Override
             public void onNothingSelected() {
                 mChart.setDescription("");
@@ -301,33 +361,31 @@ public class GraphActivity extends AppCompatActivity {
 
         int index = 0;
         // Get readings for chosen channels
-        for(int x = 0; x < channelIndex.length; x++)
-        {
+        for (int x = 0; x < channelIndex.length; x++) {
             eegData[x] = IEdk.IEE_GetAverageBandPowers(Channel_list[x]);
         }
-
+        //populate each channel's dataset with eegdata
         for (int i = 0; i < mData.getDataSetCount(); i++) {
             mData.addXValue("");
-            mData.addEntry(new Entry((float) eegData[channelIndex[index]][0], mData.getDataSetByIndex(i).getEntryCount()), 0);
+            mData.addEntry(new Entry((float) eegData[channelIndex[index]][0], mData.getDataSetByIndex(i).getEntryCount()), i);
             index++;
         }
         //notify chart data have changed
         mChart.notifyDataSetChanged();
         //limit number of visible entries
         mChart.setVisibleXRange(10, 10);
-        //scroll to last entry
-        mChart.moveViewToX(mData.getXValCount());
+        //scroll viewport
+        mChart.moveViewToX(mData.getXValCount() / mData.getDataSetCount() - 10);
         mChart.getRootView().invalidate();
         mChart.invalidate();
 
-        if(isEnableWriteFile && mIsRecording && motion_writer != null)
-        {
-            for(int i = 0; i < channelIndex.length; i++)
-            {
+        //write each line to file
+        if (isEnableWriteFile && mIsRecording && motion_writer != null) {
+            for (int i = 0; i < channelIndex.length; i++) {
                 double[] data = eegData[i];
                 try {
                     motion_writer.write(Name_Channel[i] + ",");
-                    for(double j:data)
+                    for (double j : data)
                         addData(j);
                     motion_writer.newLine();
                 } catch (IOException e) {
@@ -341,11 +399,10 @@ public class GraphActivity extends AppCompatActivity {
 
         int index = 0;
         // Get readings for chosen channels
-        for(int x = 0; x < channelIndex.length; x++)
-        {
-            eegData[x][0] = (Math.random() * 2 + x*3);
+        for (int x = 0; x < channelIndex.length; x++) {
+            eegData[x][0] = (Math.random() * 2 + x * 3);
         }
-
+        //populate each channel's dataset with eegdata
         for (int i = 0; i < mData.getDataSetCount(); i++) {
             mData.addXValue("");
             mData.addEntry(new Entry((float) eegData[channelIndex[index]][0], mData.getDataSetByIndex(i).getEntryCount()), i);
@@ -357,18 +414,17 @@ public class GraphActivity extends AppCompatActivity {
             mChart.setVisibleXRange(10, 10);
             //scroll to last entry
             mChart.moveViewToX(mData.getXValCount() / mData.getDataSetCount() - 10);
+            //refresh graph data
             mChart.getRootView().invalidate();
             mChart.invalidate();
         }
-
-        if(isEnableWriteFile && mIsRecording && motion_writer != null)
-        {
-            for(int i = 0; i < channelIndex.length; i++)
-            {
+        //write each eeg line to file
+        if (isEnableWriteFile && mIsRecording && motion_writer != null) {
+            for (int i = 0; i < channelIndex.length; i++) {
                 double[] data = eegData[i];
                 try {
                     motion_writer.write(Name_Channel[i] + ",");
-                    for(double j:data)
+                    for (double j : data)
                         addData(j);
                     motion_writer.newLine();
                 } catch (IOException e) {
@@ -394,7 +450,7 @@ public class GraphActivity extends AppCompatActivity {
                                 if (isEnableGetData && eegData != null)
                                     handler.sendEmptyMessage(2);
                             } else {
-//                                if(mIsRecording)
+                                if (mIsRecording)
                                     addSampleEntry();
                             }
                         }
@@ -416,8 +472,7 @@ public class GraphActivity extends AppCompatActivity {
                 == PackageManager.PERMISSION_GRANTED);
     }
 
-    private void getWritePermission()
-    {
+    private void getWritePermission() {
         // Should we show an explanation?
         if (ActivityCompat.shouldShowRequestPermissionRationale(this,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
@@ -485,8 +540,8 @@ public class GraphActivity extends AppCompatActivity {
                 .setMessage("Would you like to send the recorded EEG data?")
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        String filename="bandpowerValue.csv";
-                        File filelocation = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/EEGSample/", filename);
+                        String filename = "bandpowerValue.csv";
+                        File filelocation = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/EEGSample/", filename);
                         Uri path = Uri.fromFile(filelocation);
                         Intent emailIntent = new Intent(Intent.ACTION_SEND);
                         // set the type to 'email'
@@ -496,9 +551,8 @@ public class GraphActivity extends AppCompatActivity {
                         // the mail subject
                         emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Raw EEG Data File");
                         try {
-                            startActivity(Intent.createChooser(emailIntent , "Send email using..."));
-                        }
-                        catch (android.content.ActivityNotFoundException ex) {
+                            startActivity(Intent.createChooser(emailIntent, "Send email using..."));
+                        } catch (ActivityNotFoundException ex) {
                             Toast.makeText(GraphActivity.this, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
                         }
                     }
