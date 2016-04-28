@@ -452,7 +452,7 @@ public class GraphActivity extends AppCompatActivity {
                                 if (isEnableGetData && eegData != null)
                                     handler.sendEmptyMessage(2);
                             } else {
-                                if (mIsRecording)
+                               // if (mIsRecording)
                                     addSampleEntry();
                             }
                         }
