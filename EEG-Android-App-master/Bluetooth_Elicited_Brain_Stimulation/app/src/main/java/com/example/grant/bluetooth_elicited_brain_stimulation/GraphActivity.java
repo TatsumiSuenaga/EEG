@@ -368,7 +368,8 @@ public class GraphActivity extends AppCompatActivity {
         //populate each channel's dataset with eegdata
         for (int i = 0; i < mData.getDataSetCount(); i++) {
             mData.addXValue("");
-            mData.addEntry(new Entry((float) eegData[channelIndex[index]][0], mData.getDataSetByIndex(i).getEntryCount()), i);
+            //offset by 3*dataset index so graphs spaced out
+            mData.addEntry(new Entry((float) eegData[channelIndex[index]][0]+3*i, mData.getDataSetByIndex(i).getEntryCount()), i);
             index++;
         }
         //notify chart data have changed
